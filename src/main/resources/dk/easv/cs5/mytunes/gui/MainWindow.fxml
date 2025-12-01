@@ -29,7 +29,7 @@
                <HBox.margin>
                   <Insets top="3.0" />
                </HBox.margin></TextField>
-            <Button fx:id="searchButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="58.0" style="-fx-background-color: Black;" text="Search" textFill="WHITE">
+            <Button fx:id="searchButton" mnemonicParsing="false" onAction="#onSearchButtonAction" prefHeight="30.0" prefWidth="58.0" style="-fx-background-color: Black;" text="Search" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.5" />
                </font>
@@ -39,13 +39,13 @@
             <Pane prefHeight="63.0" prefWidth="163.0" />
             <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="63.0" prefWidth="158.0" style="-fx-background-color: #DBE9F4;">
                <children>
-                  <Button fx:id="btnPreviousSong" layoutX="9.0" layoutY="8.0" mnemonicParsing="false" style="-fx-background-color: black;" text="⏮" textFill="WHITE" />
-                  <Button fx:id="btnPlayPauseSong" layoutX="62.0" layoutY="8.0" mnemonicParsing="false" style="-fx-background-color: black;" text="⏵/⏸" textFill="WHITE" />
-                  <Button fx:id="btnSkipSong" layoutX="119.0" layoutY="8.0" mnemonicParsing="false" style="-fx-background-color: black;" text="⏭" textFill="WHITE">
+                  <Button fx:id="btnPreviousSong" layoutX="9.0" layoutY="8.0" mnemonicParsing="false" onAction="#onPreviousSongButtonAction" style="-fx-background-color: black;" text="⏮" textFill="WHITE" />
+                  <Button fx:id="btnPlayPauseSong" layoutX="62.0" layoutY="8.0" mnemonicParsing="false" onAction="#onPlayPauseButtonActtion" style="-fx-background-color: black;" text="⏵/⏸" textFill="WHITE" />
+                  <Button fx:id="btnNextSong" layoutX="119.0" layoutY="8.0" mnemonicParsing="false" onAction="#onNextSongButtonAction" style="-fx-background-color: black;" text="⏭" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font></Button>
-                  <Slider layoutX="9.0" layoutY="42.0" style="-fx-background-color: black;" />
+                  <Slider fx:id="durationSlider" layoutX="9.0" layoutY="42.0" style="-fx-background-color: black;" />
                </children></Pane>
             <Pane prefHeight="63.0" prefWidth="239.0" style="-fx-background-color: #DBE9F4;">
                <children>
@@ -54,7 +54,7 @@
                         <Font name="System Bold" size="13.0" />
                      </font>
                   </Label>
-                  <Label layoutX="77.0" layoutY="25.0" text="-placeholder-">
+                  <Label fx:id="lblCurrentSong" layoutX="77.0" layoutY="25.0" text="-placeholder-">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
@@ -104,18 +104,18 @@
                         <Insets right="8.0" top="8.0" />
                      </padding>
                      <children>
-                        <Button fx:id="btnNewSong" mnemonicParsing="false" text="New...">
+                        <Button fx:id="btnNewSong" mnemonicParsing="false" onAction="#onNewSongButtonAction" text="New...">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnEditSong" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Edit..." HBox.hgrow="NEVER">
+                        <Button fx:id="btnEditSong" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onEditSongButtonAction" text="Edit..." HBox.hgrow="NEVER">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Button>
                         <Pane maxWidth="-Infinity" prefHeight="31.0" prefWidth="257.0" HBox.hgrow="ALWAYS" />
-                         <Button fx:id="btnDeleteSong" mnemonicParsing="false" text="Delete...">
+                         <Button fx:id="btnDeleteSong" mnemonicParsing="false" onAction="#onDeleteSongAction" text="Delete...">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
@@ -142,18 +142,18 @@
                   </TableView>
                   <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="btnUpSongsInPlaylist" mnemonicParsing="false" rotate="90.0" style="-fx-background-color: black;" text="&lt;" textFill="WHITE">
+                        <Button fx:id="btnUpSongInPlaylist" mnemonicParsing="false" onAction="#onUpButtonAction" rotate="90.0" style="-fx-background-color: black;" text="&lt;" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="13.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnDownSongsInPlaylist" mnemonicParsing="false" rotate="90.0" style="-fx-background-color: black;" text="&gt;" textFill="WHITE">
+                        <Button fx:id="btnDownSongInPlaylist" mnemonicParsing="false" onAction="#onDownButtonAction" rotate="90.0" style="-fx-background-color: black;" text="&gt;" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="13.0" />
                            </font>
                         </Button>
                         <Pane prefHeight="100.0" prefWidth="189.0" />
-                        <Button fx:id="btnDeleteSongsInPlaylist" mnemonicParsing="false" text="Delete...">
+                        <Button fx:id="btnDeleteSongInPlaylist" mnemonicParsing="false" onAction="#onDeleteSonginPlaylistAction" text="Delete...">
                            <font>
                               <Font name="System Bold" size="13.0" />
                            </font>
@@ -193,23 +193,23 @@
                         <Insets right="8.0" top="8.0" />
                      </padding>
                      <children>
-                        <Button fx:id="btnNewPlaylists" mnemonicParsing="false" text="New...">
+                        <Button fx:id="btnNewPlaylist" mnemonicParsing="false" onAction="#onNewButtonPlaylistAction" text="New...">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnEditPlaylists" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Edit..." HBox.hgrow="NEVER">
+                        <Button fx:id="btnEditPlaylist" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onEditButtonPlaylistAction" text="Edit..." HBox.hgrow="NEVER">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnDeletePlaylists" mnemonicParsing="false" text="Delete...">
+                        <Button fx:id="btnDeletePlaylist" mnemonicParsing="false" onAction="#onDeleteButtonPlaylistAction" text="Delete...">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Button>
                         <Pane prefHeight="31.0" prefWidth="89.0" />
-                        <Button fx:id="btnClosePlaylists" mnemonicParsing="false" text="Close">
+                        <Button fx:id="btnClosePlaylist" mnemonicParsing="false" onAction="#onCloseButtonAction" text="Close">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>

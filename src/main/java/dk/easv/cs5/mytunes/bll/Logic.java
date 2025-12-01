@@ -8,8 +8,8 @@ import dk.easv.cs5.mytunes.dal.DAOInterface.IPlaylistDAO;
 import dk.easv.cs5.mytunes.dal.DAOInterface.ISongDAO;
 
 public class Logic implements ILogic {
-    private final ISongDAO songDAO = new SongDAO();                 // Logic communicates with Interfaces
-    private final IPlaylistDAO playlistDAO = new PlaylistDAO();
+    private final ISongDAO songDAO = new SongDAO();                 // Logic communicates with Interface ISongDAO
+    private final IPlaylistDAO playlistDAO = new PlaylistDAO();     // -//- with IPlaylistDAO
 
     @Override
     public void createSong(Song song) {
