@@ -17,7 +17,6 @@ import javafx.stage.Stage;
 
 import javafx.scene.media.Media;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -128,7 +127,9 @@ public class SongEditController {
         File file = fileChooser.showOpenDialog(btnChoosePath.getScene().getWindow());
         if (file != null) {
             selectedFile = file;
-            txtPath.setText(file.getAbsolutePath());
+            String baseFolder = "src/main/resources/songs/";
+            String relativePath = baseFolder + selectedFile.getName();
+            txtPath.setText(relativePath);
             try{
                 Media media = new Media(file.toURI().toString());
                 MediaPlayer mediaPlayer = new MediaPlayer(media);

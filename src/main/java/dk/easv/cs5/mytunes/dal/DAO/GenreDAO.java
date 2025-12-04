@@ -35,4 +35,5 @@ public class GenreDAO implements IGenreDAO {
         }
         return genres;
     }
+
     }

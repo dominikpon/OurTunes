@@ -41,9 +41,15 @@ public class Song {
     public String getArtist() {
         return artist;
     }
-    public String getGenre() {
-        return genre.toString();
+    public Genre getGenre() {
+        return genre;
     }
+
+    private String genre() {
+        return genre.getName();
+    }
+
+
     public int getDuration() {
         return duration;
     }
