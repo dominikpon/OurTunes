@@ -7,9 +7,8 @@ import dk.easv.cs5.mytunes.dal.DAOInterface.IPlaylistDAO;
 import java.io.IOException;
 
 public class PlaylistDAO implements IPlaylistDAO {
-    private ConnectionManager conn =  new ConnectionManager();
 
-    public PlaylistDAO() throws IOException {
+    public PlaylistDAO(){
     }
 
 

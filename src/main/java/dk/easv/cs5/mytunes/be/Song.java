@@ -4,12 +4,12 @@ public class Song {
     private int id;
     private String title;
     private String artist;
-    private String genre;
+    private Genre genre;
     private int duration;
     private String filePath;
 
     //constructor without auto increment ID from DB
-    public Song(String title, String artist, String genre, int duration, String filePath) {
+    public Song(String title, String artist, Genre genre, int duration, String filePath) {
         this.id = 0; //placeholder for ID from DB
         this.title = title;
         this.artist = artist;
@@ -18,7 +18,7 @@ public class Song {
         this.filePath = filePath;
     }
     //constructor with auto increment ID from DB
-    public Song(int id, String title, String artist, String genre, int duration, String filePath) {
+    public Song(int id, String title, String artist, Genre genre, int duration, String filePath) {
         this.id = id;
         this.title = title;
         this.artist = artist;
@@ -42,7 +42,7 @@ public class Song {
         return artist;
     }
     public String getGenre() {
-        return genre;
+        return genre.toString();
     }
     public int getDuration() {
         return duration;

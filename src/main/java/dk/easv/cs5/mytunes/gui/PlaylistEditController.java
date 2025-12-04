@@ -11,6 +11,10 @@ public class PlaylistEditController {
     @FXML
     private Button btnCancel;
 
+    public void initialize(){
+
+    }
+
     @FXML
     private void onCancelButton(ActionEvent actionEvent) {
         Stage stage = (Stage) btnCancel.getScene().getWindow();

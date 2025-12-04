@@ -1,20 +1,23 @@
 package dk.easv.cs5.mytunes.bll;
 
+import dk.easv.cs5.mytunes.be.Genre;
 import dk.easv.cs5.mytunes.be.Playlist;
 import dk.easv.cs5.mytunes.be.Song;
+import dk.easv.cs5.mytunes.dal.DAO.GenreDAO;
 import dk.easv.cs5.mytunes.dal.DAO.PlaylistDAO;
 import dk.easv.cs5.mytunes.dal.DAO.SongDAO;
+import dk.easv.cs5.mytunes.dal.DAOInterface.IGenreDAO;
 import dk.easv.cs5.mytunes.dal.DAOInterface.IPlaylistDAO;
 import dk.easv.cs5.mytunes.dal.DAOInterface.ISongDAO;
 
 import java.io.IOException;
+import java.util.List;
 
 public class Logic implements ILogic {
     private ISongDAO songDAO = new SongDAO();
     private IPlaylistDAO playlistDAO = new PlaylistDAO();
+    private IGenreDAO genreDAO = new GenreDAO();
 
-    public Logic() throws IOException {
-    }
 
     @Override
     public void createSong(Song song) {
@@ -74,6 +77,10 @@ public class Logic implements ILogic {
         int playlistId = playlist.getId();
         playlistDAO.moveSong(playlistId, songId);
 
+    }
+
+    public List<Genre> getAllGenres()  {
+        return genreDAO.getAllGenres();
     }
 
 }

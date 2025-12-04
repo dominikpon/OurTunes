@@ -1,7 +1,10 @@
 package dk.easv.cs5.mytunes.bll;
 
+import dk.easv.cs5.mytunes.be.Genre;
 import dk.easv.cs5.mytunes.be.Playlist;
 import dk.easv.cs5.mytunes.be.Song;
+
+import java.util.List;
 
 public interface ILogic {
     public void createSong(Song song);
@@ -16,4 +19,5 @@ public interface ILogic {
     public void removeSongFromPlaylist(Song song,  Playlist playlist);
     public void moveSongInPlaylist(Song song, Playlist playlist);
 
+    List<Genre> getAllGenres();     //List of genres for populating comboBox and filtering
 }

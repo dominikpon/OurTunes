@@ -40,7 +40,7 @@
                         <Font name="System Bold" size="20.0" />
                     </font>
                 </Label>
-                <Label alignment="CENTER_RIGHT" prefHeight="48.0" prefWidth="106.0" text="Category:" textFill="WHITE" GridPane.rowIndex="2">
+                <Label alignment="CENTER_RIGHT" prefHeight="48.0" prefWidth="106.0" text="Genre:" textFill="WHITE" GridPane.rowIndex="2">
                     <font>
                         <Font name="System Bold" size="20.0" />
                     </font>
@@ -60,7 +60,7 @@
                 <ComboBox fx:id="comboGenre" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <TextField fx:id="txtDuration" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                 <TextField fx:id="txtPath" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="280.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                <Button fx:id="btnChoosePath" mnemonicParsing="false" style="-fx-background-color: gray;" text="Choose" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                <Button fx:id="btnChoosePath" mnemonicParsing="false" onAction="#onChoosePath" style="-fx-background-color: gray;" text="Choose" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="4">
                     <GridPane.margin>
                         <Insets left="292.0" />
                     </GridPane.margin>
