@@ -134,7 +134,7 @@ public class SongEditController {
                 Media media = new Media(file.toURI().toString());
                 MediaPlayer mediaPlayer = new MediaPlayer(media);
                 mediaPlayer.setOnReady (() -> {
-                    int durationInSeconds = (int) media.getDuration().toSeconds();
+                    int durationInSeconds = (int) media.getDuration().toSeconds();      //formatter should be in BLL
                     int minutes = durationInSeconds / 60;
                      int seconds = durationInSeconds - minutes * 60;
                      String formatedDuration = String.format("%02d:%02d" ,minutes, seconds);

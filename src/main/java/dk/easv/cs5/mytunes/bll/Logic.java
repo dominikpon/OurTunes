@@ -3,6 +3,7 @@ package dk.easv.cs5.mytunes.bll;
 import dk.easv.cs5.mytunes.be.Genre;
 import dk.easv.cs5.mytunes.be.Playlist;
 import dk.easv.cs5.mytunes.be.Song;
+import dk.easv.cs5.mytunes.bll.tools.FormattingTool;
 import dk.easv.cs5.mytunes.dal.DAO.GenreDAO;
 import dk.easv.cs5.mytunes.dal.DAO.PlaylistDAO;
 import dk.easv.cs5.mytunes.dal.DAO.SongDAO;
@@ -17,6 +18,7 @@ public class Logic implements ILogic {
     private ISongDAO songDAO = new SongDAO();
     private IPlaylistDAO playlistDAO = new PlaylistDAO();
     private IGenreDAO genreDAO = new GenreDAO();
+    private FormattingTool formattingTool = new FormattingTool();
 
 
     @Override
@@ -81,6 +83,13 @@ public class Logic implements ILogic {
 
     public List<Genre> getAllGenres()  {
         return genreDAO.getAllGenres();
+    }
+
+    public List<Song> getAllSongs() {
+        return songDAO.getAllSongs();
+    }
+    public String getFormattedDuration(Song song) {
+        return formattingTool.format(song.getDuration());
     }
 
 }

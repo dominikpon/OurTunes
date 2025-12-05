@@ -3,27 +3,51 @@ package dk.easv.cs5.mytunes.gui;
 import dk.easv.cs5.mytunes.Application;
 import dk.easv.cs5.mytunes.be.Song;
 import dk.easv.cs5.mytunes.bll.ILogic;
+import dk.easv.cs5.mytunes.bll.Logic;
+import dk.easv.cs5.mytunes.bll.tools.FormattingTool;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class Controller {
-    private ILogic logic;
 
+    //Table with songs
 
+    @FXML private TableView<Song> songsTable; //<Song> to know that Table will consist of songs
+    @FXML private TableColumn<Song, String> colTitle;      //Each column will consist of String from Song table
+    @FXML private TableColumn<Song, String> colArtist;
+    @FXML private TableColumn<Song, String> colGenre;
+    @FXML private TableColumn<Song, String> colDuration;
+
+    private ILogic logic = new Logic();
     @FXML
-    private Label welcomeText;
+    private void initialize(){
+        //set columns
+        colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        colArtist.setCellValueFactory(new PropertyValueFactory<>("artist"));
+        colGenre.setCellValueFactory(new PropertyValueFactory<>("genre"));
 
-    @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
+        //format duration to mm:ss
+        colDuration.setCellValueFactory(cellData ->{
+            int seconds = cellData.getValue().getDuration();
+            String formatted = FormattingTool.format(seconds);
+                    return new ReadOnlyStringWrapper(formatted);
+        });
+        songsTable.getItems().setAll(logic.getAllSongs());
+
     }
+
+
     @FXML
     private void onNewSongButtonAction(ActionEvent actionEvent) throws IOException {
             FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/SongEditWindow.fxml"));

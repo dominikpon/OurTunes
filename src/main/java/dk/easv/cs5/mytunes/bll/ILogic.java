@@ -20,4 +20,5 @@ public interface ILogic {
     public void moveSongInPlaylist(Song song, Playlist playlist);
 
     List<Genre> getAllGenres();     //List of genres for populating comboBox and filtering
+    List<Song> getAllSongs();
 }

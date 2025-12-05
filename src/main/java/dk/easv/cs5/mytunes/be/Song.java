@@ -32,6 +32,13 @@ public class Song {
 
     }
 
+    public Song(String title, String artist, String genreName, int duration) {
+        this.title = title;
+        this.artist = artist;
+        this.genre = new Genre(genreName);
+        this.duration = duration;
+    }
+
     public int getId() {
         return id;
     }
@@ -53,11 +60,7 @@ public class Song {
     public int getDuration() {
         return duration;
     }
-    public String getFormattedDuration() {  // Converting and formatting duration
-        int minutes = duration / 60;
-        int seconds = duration % 60;
-        return String.format("%02d:%02d", minutes, seconds);
-    }
+
 
     public String getFilePath() {
         return filePath;
@@ -67,6 +70,6 @@ public class Song {
     }
 
     public String toString() {
-        return "ID: "+id+" Title: "+title+" Artist: "+artist+" Genre: "+genre +" Duration: "+getFormattedDuration() + "FIlePath: "+filePath;
+        return "ID: "+id+" Title: "+title+" Artist: "+artist+" Genre: "+genre +" Duration: "+getDuration() + "FIlePath: "+filePath;
     }
 }

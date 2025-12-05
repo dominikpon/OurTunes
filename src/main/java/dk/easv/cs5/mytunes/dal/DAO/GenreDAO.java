@@ -19,7 +19,7 @@ public class GenreDAO implements IGenreDAO {
     }
     public List<Genre> getAllGenres() {
         List<Genre> genres = new ArrayList<>();
-        String sql = "SELECT * FROM Genre";
+        String sql = "SELECT * FROM Genres";
         try (Connection conn = ConnectionManager.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {

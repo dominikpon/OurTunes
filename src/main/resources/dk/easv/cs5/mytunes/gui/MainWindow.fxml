@@ -95,8 +95,8 @@
                     <columns>
                       <TableColumn fx:id="colTitle" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Title" />
                       <TableColumn fx:id="colArtist" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Artist" />
-                        <TableColumn fx:id="colCategory" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Category" />
-                        <TableColumn fx:id="colTime" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="Time" />
+                        <TableColumn fx:id="colGenre" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Genre" />
+                        <TableColumn fx:id="colDuration" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="Duration" />
                     </columns>
                   </TableView>
                   <HBox alignment="CENTER_LEFT" maxWidth="-Infinity" prefHeight="30.0" prefWidth="487.0" spacing="8.0" VBox.vgrow="NEVER">
@@ -182,7 +182,7 @@
                     <columns>
                       <TableColumn maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Name" />
                       <TableColumn maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Songs" />
-                        <TableColumn maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="Time" />
+                        <TableColumn maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="Duration" />
                     </columns>
                      <VBox.margin>
                         <Insets top="6.0" />
