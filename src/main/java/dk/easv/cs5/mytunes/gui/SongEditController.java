@@ -31,8 +31,12 @@ import java.util.List;
 public class SongEditController {
 
     private ObservableList<Song> songList = FXCollections.observableArrayList();
+    private ObservableList<Genre> genreList = FXCollections.observableArrayList();
     public void setSongList(ObservableList<Song> songList){
         this.songList = songList;
+    }
+    public ObservableList<Genre> getGenreList(){
+        return this.genreList;
     }
 
     private ILogic logic = new Logic();
@@ -60,12 +64,16 @@ public class SongEditController {
 
     @FXML
     public void initialize(){
+        comboGenre.setItems(genreList);
         loadGenresIntoComboBox();
+
     }
 
     private void loadGenresIntoComboBox(){
         List <Genre> genres = logic.getAllGenres();
-        comboGenre.setItems(FXCollections.observableArrayList(genres));
+        genreList.setAll(genres);
+
+        //comboGenre.setItems(FXCollections.observableArrayList(genres));
     }
 
 
@@ -102,7 +110,7 @@ public class SongEditController {
             durationInSeconds = Integer.parseInt(parts[0]) * 60 + Integer.parseInt(parts[1]);
         } catch (NumberFormatException | ArrayIndexOutOfBoundsException e)
         {
-            AlertHelper.showWarning("Invalid duration format. Please enter mm:ss or duration in seconds.");
+            AlertHelper.showError("Invalid duration format. Please enter mm:ss or duration in seconds.");
             return;
         }
         Song song = new Song(title, artist, selectedGenre, durationInSeconds, path);
@@ -110,7 +118,7 @@ public class SongEditController {
             try {
                 logic.createSong(song);
                 songList.add(song);
-                AlertHelper.showWarning("Song was saved!");
+                AlertHelper.showInfo("Song was saved!");
 
                 txtTitle.clear();
                 txtArtist.clear();
@@ -118,7 +126,7 @@ public class SongEditController {
                 txtDuration.clear();
                 txtPath.clear();
             } catch(Exception e) {
-                AlertHelper.showWarning("An error occured while trying to save the song! ");
+                AlertHelper.showError("An error occured while trying to save the song! ");
                 e.printStackTrace();}
     }
 
@@ -150,7 +158,7 @@ public class SongEditController {
                 });
             } catch (Exception e) {
                 e.printStackTrace();
-                AlertHelper.showWarning("Cannot read the duration from the file!");
+                AlertHelper.showError("Cannot read the duration from the file!");
             }
         }
 
@@ -159,6 +167,8 @@ public class SongEditController {
     public void onMoreGenresButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/GenreWindow.fxml"));
         Parent root = fxmlLoader.load();
+        GenreAddController controller = fxmlLoader.getController();
+        controller.setGenresList(getGenreList());
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setResizable(false);

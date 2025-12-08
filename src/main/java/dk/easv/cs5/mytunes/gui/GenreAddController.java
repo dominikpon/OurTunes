@@ -19,10 +19,13 @@ import java.util.List;
 public class GenreAddController {
 
     private ObservableList<Genre> genresList = FXCollections.observableArrayList();
-
-    public void setGenres(ObservableList<Genre> genres) {
-        this.genresList = genres;
+    public void setGenresList(ObservableList<Genre> genresList){
+        this.genresList = genresList;
     }
+    public ObservableList<Genre> getGenresList(){
+        return genresList;
+    }
+
 
     private ILogic logic = new Logic();
 
@@ -49,14 +52,17 @@ public class GenreAddController {
 
         try{
             logic.createGenre(genre);
-            genresList.add(genre);
-            AlertHelper.showWarning("Genre added successfully!");
+            if(this.genresList != null){
+                this.genresList.add(genre);
+            }
+            AlertHelper.showInfo("Genre added successfully!");
 
             txtName.clear();
         }   catch (Exception e){
-            AlertHelper.showWarning("Error while adding genre!");
+            AlertHelper.showError("Error while adding genre!");
             e.printStackTrace();
         }
+
 
     }
 }

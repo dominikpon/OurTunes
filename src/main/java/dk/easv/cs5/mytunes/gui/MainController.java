@@ -49,14 +49,12 @@ public class MainController {
 
         songsTable.setItems(songList);
 
+
         //Load songs from DB
         songList.setAll(logic.getAllSongs());
 
     }
 
-    public void setSongList(ObservableList<Song> songList){
-        this.songList = songList;
-    }
 
     @FXML
     private void onNewSongButtonAction(ActionEvent actionEvent) throws IOException {
