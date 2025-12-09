@@ -3,6 +3,7 @@ package dk.easv.cs5.mytunes.bll;
 import dk.easv.cs5.mytunes.be.Genre;
 import dk.easv.cs5.mytunes.be.Playlist;
 import dk.easv.cs5.mytunes.be.Song;
+import dk.easv.cs5.mytunes.bll.exceptions.LogicException;
 import dk.easv.cs5.mytunes.bll.tools.FormattingTool;
 import dk.easv.cs5.mytunes.dal.DAO.GenreDAO;
 import dk.easv.cs5.mytunes.dal.DAO.PlaylistDAO;
@@ -11,8 +12,8 @@ import dk.easv.cs5.mytunes.dal.DAOInterface.IGenreDAO;
 import dk.easv.cs5.mytunes.dal.DAOInterface.IPlaylistDAO;
 import dk.easv.cs5.mytunes.dal.DAOInterface.ISongDAO;
 import javafx.fxml.FXML;
-
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 public class Logic implements ILogic {
@@ -23,8 +24,17 @@ public class Logic implements ILogic {
 
 
     @Override
-    public void createSong(Song song) {
-        songDAO.save(song);
+    public void createSong(Song song) throws LogicException {
+
+        if (song.getTitle().isEmpty()) {
+            throw new LogicException("Title is empty!");
+        }
+        try {songDAO.save(song);
+
+            }catch (SQLException e){
+                e.printStackTrace();
+            throw new LogicException("Failed to save song!", e);
+        }
 
     }
 

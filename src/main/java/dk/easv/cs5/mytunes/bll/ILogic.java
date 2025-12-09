@@ -3,11 +3,12 @@ package dk.easv.cs5.mytunes.bll;
 import dk.easv.cs5.mytunes.be.Genre;
 import dk.easv.cs5.mytunes.be.Playlist;
 import dk.easv.cs5.mytunes.be.Song;
+import dk.easv.cs5.mytunes.bll.exceptions.LogicException;
 
 import java.util.List;
 
 public interface ILogic {
-    public void createSong(Song song);
+    public void createSong(Song song) throws LogicException;
     public void deleteSong(Song song);
     public void editSong(Song song);
 

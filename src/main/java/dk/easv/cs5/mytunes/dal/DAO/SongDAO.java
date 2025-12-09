@@ -20,7 +20,7 @@ public class SongDAO implements ISongDAO  {
     }
 
     @Override
-    public void save(Song song) {
+    public void save(Song song) throws SQLException{
         String sql = "INSERT INTO Songs (title, artist, genreId, duration, filePath ) VALUES (?,?,?,?,?)";
 
         try (Connection conn = getConnection();
