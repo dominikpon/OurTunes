@@ -24,15 +24,15 @@ public class SongDAO implements ISongDAO  {
         String sql = "INSERT INTO Songs (title, artist, genreId, duration, filePath ) VALUES (?,?,?,?,?)";
 
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)){
+             PreparedStatement ps = conn.prepareStatement(sql)){
 
-            stmt.setString (1, song.getTitle());
-            stmt.setString (2, song.getArtist());
-            stmt.setInt (3, song.getGenre().getId());
-            stmt.setInt (4, song.getDuration());
-            stmt.setString (5, song.getFilePath());
+            ps.setString (1, song.getTitle());
+            ps.setString (2, song.getArtist());
+            ps.setInt (3, song.getGenre().getId());
+            ps.setInt (4, song.getDuration());
+            ps.setString (5, song.getFilePath());
 
-            stmt.executeUpdate();
+            ps.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -57,8 +57,8 @@ public class SongDAO implements ISongDAO  {
                 "LEFT JOIN Genres g ON s.genreId = g.id";
 
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
             {
                 while (rs.next())
                 {

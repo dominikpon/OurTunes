@@ -15,7 +15,7 @@ public class GenreDAO implements IGenreDAO {
     private Connection getConnection() throws SQLException {
         return ConnectionManager.getConnection();
     }
-    public void save(Genre genre) {
+    public void save(Genre genre) throws SQLException {
         String sql = "INSERT INTO Genres (name) VALUES (?)";
 
         try( Connection conn = getConnection();

@@ -11,8 +11,6 @@ import dk.easv.cs5.mytunes.dal.DAO.SongDAO;
 import dk.easv.cs5.mytunes.dal.DAOInterface.IGenreDAO;
 import dk.easv.cs5.mytunes.dal.DAOInterface.IPlaylistDAO;
 import dk.easv.cs5.mytunes.dal.DAOInterface.ISongDAO;
-import javafx.fxml.FXML;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -26,9 +24,26 @@ public class Logic implements ILogic {
     @Override
     public void createSong(Song song) throws LogicException {
 
-        if (song.getTitle().isEmpty()) {
+        if (song.getTitle() == null) {
             throw new LogicException("Title is empty!");
         }
+
+        if (song.getArtist() == null) {
+            throw new LogicException("Artist is empty!");
+        }
+
+        if (song.getGenre() == null) {
+            throw new LogicException("Genre is empty!");
+        }
+
+        if(song.getDuration()<=0){
+            throw new LogicException("Duration is empty!");
+        }
+
+        if(song.getFilePath() == null  ){
+            throw new LogicException("File path is empty!");
+        }
+
         try {songDAO.save(song);
 
             }catch (SQLException e){
@@ -50,13 +65,31 @@ public class Logic implements ILogic {
 
     }
     @Override
-    public void createGenre(Genre genre){
-        genreDAO.save(genre);
+    public void createGenre(Genre genre) throws LogicException {
+        if(genre.getName() == null) {
+            throw new LogicException("Genre is empty!");
+        }
+        try {genreDAO.save(genre);
+        }catch (SQLException e){
+            e.printStackTrace();
+            throw new LogicException("Failed to save a genre");
+        }
+
     }
 
     @Override
-    public void createPlaylist(Playlist playlist) {
-        playlistDAO.save(playlist);
+    public void createPlaylist(Playlist playlist) throws LogicException {
+
+        if(playlist.getName() == null){
+            throw new LogicException("Name is empty!");
+        }
+
+        try {
+            playlistDAO.save(playlist);
+        }catch (SQLException e){
+            e.printStackTrace();
+            throw new LogicException("Failed to save playlist",e );
+        }
 
     }
 
@@ -103,6 +136,10 @@ public class Logic implements ILogic {
     public List<Song> getAllSongs() {
         return songDAO.getAllSongs();
     }
+    /*public List<Playlist> getAllPlaylists() {
+        return playlistDAO;
+    }*/
+
     public String getFormattedDuration(Song song) {
         return formattingTool.format(song.getDuration());
     }

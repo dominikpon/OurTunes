@@ -18,9 +18,13 @@ public class Playlist {
         this.id = id;
         this.name = name;
     }
+
+    public Playlist(int id, String name, List<Song> songList, int duration) {}
+
     public int getId() {
         return id;
     }
+
     public String getName() {
         return name;
     }

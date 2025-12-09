@@ -52,10 +52,6 @@ public class Song {
         return genre;
     }
 
-    private String genre() {
-        return genre.getName();
-    }
-
 
     public int getDuration() {
         return duration;

@@ -1,6 +1,8 @@
 package dk.easv.cs5.mytunes.gui;
 
 import dk.easv.cs5.mytunes.Application;
+import dk.easv.cs5.mytunes.be.Genre;
+import dk.easv.cs5.mytunes.be.Playlist;
 import dk.easv.cs5.mytunes.be.Song;
 import dk.easv.cs5.mytunes.bll.ILogic;
 import dk.easv.cs5.mytunes.bll.Logic;
@@ -22,15 +24,18 @@ import java.io.IOException;
 
 public class MainController {
 
+
     //Table with songs
 
     @FXML private TableView<Song> songsTable; //<Song> to know that Table will consist of songs
+    @FXML private TableView playlistsTable;
     @FXML private TableColumn<Song, String> colTitle;      //Each column will consist of String from Song table
     @FXML private TableColumn<Song, String> colArtist;
     @FXML private TableColumn<Song, String> colGenre;
     @FXML private TableColumn<Song, String> colDuration;
 
     private ObservableList<Song> songList = FXCollections.observableArrayList();
+    private ObservableList<Playlist> playlistList = FXCollections.observableArrayList();
 
     private ILogic logic = new Logic();
     @FXML
@@ -48,10 +53,13 @@ public class MainController {
         });
 
         songsTable.setItems(songList);
+        playlistsTable.setItems(playlistList);
+
 
 
         //Load songs from DB
         songList.setAll(logic.getAllSongs());
+        //playlistList.setAll(logic.get);
 
     }
 

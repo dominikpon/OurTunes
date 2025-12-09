@@ -2,9 +2,11 @@ package dk.easv.cs5.mytunes.dal.DAOInterface;
 
 import dk.easv.cs5.mytunes.be.Playlist;
 
+import java.sql.SQLException;
+
 public interface IPlaylistDAO  {
 
-    public void save(Playlist playlist);
+    public void save(Playlist playlist) throws SQLException;
     public void edit(Playlist playlist);
     public void remove(int playlistId);
 

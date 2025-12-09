@@ -5,6 +5,7 @@ import dk.easv.cs5.mytunes.be.Playlist;
 import dk.easv.cs5.mytunes.be.Song;
 import dk.easv.cs5.mytunes.bll.exceptions.LogicException;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ILogic {
@@ -12,9 +13,9 @@ public interface ILogic {
     public void deleteSong(Song song);
     public void editSong(Song song);
 
-    public void createGenre(Genre genre);
+    public void createGenre(Genre genre) throws LogicException;
 
-    public void createPlaylist(Playlist playlist);
+    public void createPlaylist(Playlist playlist) throws SQLException, LogicException;
     public void deletePlaylist(Playlist playlist);
     public void editPlaylist(Playlist playlist);
 
