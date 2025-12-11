@@ -1,6 +1,7 @@
 package dk.easv.cs5.mytunes.dal.DAOInterface;
 
 import dk.easv.cs5.mytunes.be.Playlist;
+import dk.easv.cs5.mytunes.be.Song;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -17,4 +18,5 @@ public interface IPlaylistDAO  {
 
 
     public List<Playlist> getAllPlaylists();
+    public List<Song> getAllSongsForPlaylist(int playlistId) throws SQLException;
 }

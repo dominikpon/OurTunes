@@ -37,7 +37,7 @@ public class Playlist {
         return songList.stream().mapToInt(Song::getDuration).sum();
     }
 
-    public List<Song> getSongList() {
+    public List<Song> getSongs() {
         return songList;
     }
 

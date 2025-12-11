@@ -6,7 +6,9 @@ import dk.easv.cs5.mytunes.be.Playlist;
 import dk.easv.cs5.mytunes.be.Song;
 import dk.easv.cs5.mytunes.bll.ILogic;
 import dk.easv.cs5.mytunes.bll.Logic;
+import dk.easv.cs5.mytunes.bll.exceptions.LogicException;
 import dk.easv.cs5.mytunes.bll.tools.FormattingTool;
+import dk.easv.cs5.mytunes.gui.helpers.AlertHelper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -30,6 +33,7 @@ public class MainController {
 
 
     //Table with songs
+
     @FXML private TableView<Song> songsTable; //<Song> to know that Table will consist of songs
     @FXML private TableColumn<Song, String> colTitle;      //Each column will consist of String from Song table
     @FXML private TableColumn<Song, String> colArtist;
@@ -42,14 +46,22 @@ public class MainController {
     @FXML private TableColumn<Playlist, String> colPlaylistDuration;
     @FXML private TableColumn<Playlist, String> colPlaylistSongs;
 
+    //Table with Songs in Playlist
+    @FXML private TableView<Song> playlistSongsTable;
+    @FXML private TableColumn colSongInPlaylist;
+
 
     //Observable lists for manual refreshing of Lists
     private ObservableList<Song> songList = FXCollections.observableArrayList();
     private ObservableList<Playlist> playlistList = FXCollections.observableArrayList();
+    private ObservableList<Song> playlistSongList = FXCollections.observableArrayList();
+
+    private Song lastSelectedSong;
+    private Playlist lastSelectedPlaylist;
 
     private ILogic logic = new Logic();
     @FXML
-    private void initialize(){
+    private void initialize() throws LogicException {
 
 
 
@@ -69,11 +81,35 @@ public class MainController {
         colPlaylistName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colPlaylistDuration.setCellValueFactory(cd ->
                 new ReadOnlyStringWrapper(FormattingTool.format(cd.getValue().getDuration())));
+        colPlaylistSongs.setCellValueFactory(cd ->(new ReadOnlyStringWrapper(String.valueOf(cd.getValue().getSongs().size()))));
 
-        colPlaylistSongs.setCellValueFactory(new PropertyValueFactory<>("songs"));
+        //set column for Songs in Playlists table
+        colSongInPlaylist.setCellValueFactory(new PropertyValueFactory<>("title"));
 
         songsTable.setItems(songList);
         playlistsTable.setItems(playlistList);
+        playlistSongsTable.setItems(playlistSongList);
+
+
+        //Tracking the last selected playlist
+        playlistsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
+        {
+            if (newValue != null) {
+                lastSelectedPlaylist = newValue;
+                System.out.println("Selected playlist: " + newValue.getName());
+                loadSongsForPlaylist(newValue.getId());
+            }
+
+        });
+        //Tracking the last selected song
+        songsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
+                {
+                    if (newValue != null) {
+                        lastSelectedSong = newValue;
+                        System.out.println("Selected song: " + newValue);
+                    }
+                }
+        );
 
 
 
@@ -81,9 +117,22 @@ public class MainController {
         songList.setAll(logic.getAllSongs());
         //Load playlists from database
         playlistList.setAll(logic.getAllPlaylists());
+        //Load songs in playlist from database
+
+
+
+
 
     }
 
+    private void loadSongsForPlaylist(int playlistId){
+        try {
+            playlistSongList.setAll(logic.getAllSongsInPlaylist(playlistId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertHelper.showInfo("Could not load songs for playlist " + playlistId + "\n" + e.getMessage());
+        }
+    }
 
 
     @FXML
@@ -106,7 +155,7 @@ public class MainController {
     private void onPreviousSongButtonAction(ActionEvent actionEvent) {
     }
     @FXML
-    private void onPlayPauseButtonActtion(ActionEvent actionEvent) {
+    private void onPlayPauseButtonAction(ActionEvent actionEvent) {
     }
     @FXML
     private void onNextSongButtonAction(ActionEvent actionEvent) {
@@ -164,4 +213,20 @@ public class MainController {
     private void onCloseButtonAction(ActionEvent actionEvent) {
         javafx.application.Platform.exit();
     }
+
+    public void onAddSongToPlaylistButtonAction(ActionEvent actionEvent) {
+        if (lastSelectedPlaylist == null){
+            System.out.println("Select a playlist");
+            return;
+        }
+
+        if (lastSelectedSong == null) {
+            System.out.println("Select a song first");
+        }
+        logic.addSongToPlaylist(lastSelectedSong, lastSelectedPlaylist);
+        playlistSongList.add(lastSelectedSong);
+
+        System.out.println("Added: " + lastSelectedSong.getTitle()+ "to " + lastSelectedPlaylist.getName());
+    }
+
 }

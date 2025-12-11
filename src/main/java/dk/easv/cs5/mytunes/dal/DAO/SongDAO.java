@@ -34,6 +34,14 @@ public class SongDAO implements ISongDAO  {
 
             ps.executeUpdate();
 
+            try (ResultSet rs = ps.executeQuery()){
+                if (rs.next()) {
+                    int generatedId = rs.getInt(1);
+                    song.setId(generatedId);
+                }
+            }
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -52,7 +60,7 @@ public class SongDAO implements ISongDAO  {
 
     public List<Song> getAllSongs() {
         List<Song> songs = new ArrayList<>();
-        String sql = "SELECT s.title,s.artist,g.name as genre ,s.duration " +
+        String sql = "SELECT s.title,s.artist,g.name as genre ,s.duration, s.filePath " +
                 "FROM Songs s " +
                 "LEFT JOIN Genres g ON s.genreId = g.id";
 

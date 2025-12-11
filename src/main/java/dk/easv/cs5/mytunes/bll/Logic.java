@@ -12,6 +12,7 @@ import dk.easv.cs5.mytunes.dal.DAOInterface.IGenreDAO;
 import dk.easv.cs5.mytunes.dal.DAOInterface.IPlaylistDAO;
 import dk.easv.cs5.mytunes.dal.DAOInterface.ISongDAO;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Logic implements ILogic {
@@ -136,8 +137,17 @@ public class Logic implements ILogic {
     public List<Song> getAllSongs() {
         return songDAO.getAllSongs();
     }
-    public List<Playlist> getAllPlaylists() {
+    public List<Playlist> getAllPlaylists() throws LogicException {
         return playlistDAO.getAllPlaylists();
+    }
+
+    public List<Song> getAllSongsInPlaylist(int playlistId){
+        try {
+            return playlistDAO.getAllSongsForPlaylist(playlistId);
+        }catch (SQLException e){
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     public String getFormattedDuration(Song song) {

@@ -1,6 +1,8 @@
 package dk.easv.cs5.mytunes.dal.DAO;
 
+import dk.easv.cs5.mytunes.be.Genre;
 import dk.easv.cs5.mytunes.be.Playlist;
+import dk.easv.cs5.mytunes.be.Song;
 import dk.easv.cs5.mytunes.dal.ConnectionManager;
 import dk.easv.cs5.mytunes.dal.DAOInterface.IPlaylistDAO;
 
@@ -30,14 +32,11 @@ public class PlaylistDAO implements IPlaylistDAO {
             PreparedStatement ps = conn.prepareStatement(sql);
 
             ps.setString(1, playlist.getName());
-
             ps.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Override
@@ -53,7 +52,19 @@ public class PlaylistDAO implements IPlaylistDAO {
 
     @Override
     public void addSongToPlaylist(int songId, int playlistId) {
+        String sql = "INSERT INTO PlaylistSongs (playlistId, songId) VALUES (?, ?)";
 
+        try{ Connection conn = getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql); {
+
+
+                ps.setInt(1, playlistId);
+                ps.setInt(2, songId);
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
@@ -70,22 +81,57 @@ public class PlaylistDAO implements IPlaylistDAO {
         List<Playlist> playlists = new ArrayList<>();
         String sql = "SELECT * FROM Playlists";
 
-        try {
+        try (
             Connection conn = getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
+                int id = rs.getInt("id");
                 String name = rs.getString("name");
+                Playlist playlist = new Playlist(id, name);     //creates a new instance of playlist
 
-                Playlist playlist = new Playlist(name);
+                try {
+                    List<Song> songs = getAllSongsForPlaylist(id);
+                    playlist.setSongList(songs);            //set songs list before choosing the playlist
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 playlists.add(playlist);
             }
-        }catch(SQLException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    return playlists;
-                }
+            } catch (SQLException e) {
+            e.printStackTrace();}
+        return playlists;
+        }
+
+    public List<Song> getAllSongsForPlaylist(int playlistId) throws SQLException {
+        List<Song> songs = new ArrayList<>();
+        String sql = "SELECT s.id,s.title, s.artist, s.duration, s.filePath, g.name AS genre " +
+                    "FROM Songs s " +
+                    "JOIN PlaylistSongs ps ON s.id = ps.songId " +
+                    "LEFT JOIN Genres g ON s.genreId = g.id " +
+                    "WHERE ps.playlistId = ?";
+
+        try (Connection conn = getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, playlistId);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                songs.add(new Song(
+                        rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getString("artist"),
+                        new Genre(rs.getString("genre")),
+                        rs.getInt("duration"),
+                        rs.getString("filePath")
+                ));
+            }
+        }
+        return songs;
+
+    }
 }
 

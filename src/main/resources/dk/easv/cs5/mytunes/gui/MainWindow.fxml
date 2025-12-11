@@ -39,7 +39,7 @@
                 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="63.0" prefWidth="158.0" style="-fx-background-color: #DBE9F4;">
                     <children>
                         <Button fx:id="btnPreviousSong" layoutX="9.0" layoutY="8.0" mnemonicParsing="false" onAction="#onPreviousSongButtonAction" style="-fx-background-color: black;" text="⏮" textFill="WHITE" />
-                        <Button fx:id="btnPlayPauseSong" layoutX="62.0" layoutY="8.0" mnemonicParsing="false" onAction="#onPlayPauseButtonActtion" style="-fx-background-color: black;" text="⏵/⏸" textFill="WHITE" />
+                        <Button fx:id="btnPlayPauseSong" layoutX="62.0" layoutY="8.0" mnemonicParsing="false" onAction="#onPlayPauseButtonAction" style="-fx-background-color: black;" text="⏵/⏸" textFill="WHITE" />
                         <Button fx:id="btnNextSong" layoutX="119.0" layoutY="8.0" mnemonicParsing="false" onAction="#onNextSongButtonAction" style="-fx-background-color: black;" text="⏭" textFill="WHITE">
                             <font>
                                 <Font name="System Bold" size="13.0" />
@@ -139,9 +139,9 @@
             <children>
                 <VBox layoutX="-164.0" layoutY="65.0" prefHeight="711.0" prefWidth="394.0">
                     <children>
-                        <TableView maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="476.0" prefWidth="218.0">
+                        <TableView fx:id="playlistSongsTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="476.0" prefWidth="218.0">
                             <columns>
-                                <TableColumn maxWidth="300.0" minWidth="211.53903198242188" prefWidth="216.99996948242188" resizable="false" text="Songs in playlist" />
+                        <TableColumn fx:id="colSongInPlaylist" maxWidth="300.0" minWidth="211.53903198242188" prefWidth="216.99996948242188" resizable="false" />
                             </columns>
                             <VBox.margin>
                                 <Insets left="50.0" top="67.0" />
@@ -178,7 +178,7 @@
     <right>
         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="320.0" BorderPane.alignment="CENTER_LEFT">
             <children>
-                <Button layoutY="39.0" mnemonicParsing="false" style="-fx-background-color: black;" text="&lt;" textFill="WHITE">
+                <Button layoutY="39.0" mnemonicParsing="false" onAction="#onAddSongToPlaylistButtonAction" style="-fx-background-color: black;" text="&lt;" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="13.0" />
                     </font>

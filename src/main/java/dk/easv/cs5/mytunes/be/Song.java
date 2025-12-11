@@ -27,11 +27,6 @@ public class Song {
         this.filePath = filePath;
     }
 
-    public Song(String title) {
-        this.title = title;
-
-    }
-
     public Song(String title, String artist, String genreName, int duration) {
         this.title = title;
         this.artist = artist;
@@ -39,9 +34,14 @@ public class Song {
         this.duration = duration;
     }
 
+
     public int getId() {
         return id;
     }
+
+    //Setting ID should be only called by DAO after inserting (song) to the database
+    public void setId(int id) {this.id = id;}
+
     public String getTitle() {
         return title;
     }
