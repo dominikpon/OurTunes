@@ -147,7 +147,7 @@
                                 <Insets left="50.0" top="67.0" />
                             </VBox.margin>
                         </TableView>
-                        <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="269.0">
+                        <HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="268.0">
                             <children>
                                 <Button fx:id="btnUpSongInPlaylist" mnemonicParsing="false" onAction="#onUpButtonAction" rotate="90.0" style="-fx-background-color: black;" text="&lt;" textFill="WHITE" HBox.hgrow="NEVER">
                                     <font>
@@ -195,18 +195,18 @@
                         <Insets right="8.0" top="8.0" />
                     </padding>
                     <children>
-                        <Button fx:id="btnNewPlaylist" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onNewButtonPlaylistAction" prefHeight="36.0" prefWidth="77.0" text="New..." HBox.hgrow="NEVER">
+                        <Button fx:id="btnNewPlaylist" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onNewButtonPlaylistAction" text="New..." HBox.hgrow="NEVER">
                             <font>
                                 <Font name="System Bold" size="16.0" />
                             </font>
                         </Button>
-                        <Button fx:id="btnEditPlaylist" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onEditButtonPlaylistAction" prefHeight="36.0" prefWidth="69.0" text="Edit..." HBox.hgrow="NEVER">
+                        <Button fx:id="btnEditPlaylist" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onEditButtonPlaylistAction" text="Edit..." HBox.hgrow="NEVER">
                             <font>
                                 <Font name="System Bold" size="16.0" />
                             </font>
                         </Button>
-                        <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="51.0" prefWidth="37.0" />
-                        <Button fx:id="btnDeletePlaylist" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onDeleteButtonPlaylistAction" prefHeight="36.0" prefWidth="69.6" text="Delete" HBox.hgrow="NEVER">
+                        <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="51.0" prefWidth="52.0" />
+                        <Button fx:id="btnDeletePlaylist" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onDeleteButtonPlaylistAction" text="Delete" HBox.hgrow="NEVER">
                             <font>
                                 <Font name="System Bold" size="16.0" />
                             </font>
