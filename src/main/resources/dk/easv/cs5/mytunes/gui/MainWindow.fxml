@@ -21,11 +21,11 @@
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </padding>
             <children>
-                <Label prefHeight="33.0" prefWidth="73.0" text="Filter:" textFill="WHITE" HBox.hgrow="NEVER">
+                <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="34.0" prefWidth="86.0" text="Filter:" textFill="WHITE" HBox.hgrow="NEVER">
                     <font>
                         <Font name="System Bold" size="30.0" />
                     </font></Label>
-                <TextField fx:id="filterField" prefHeight="31.0" prefWidth="210.0" promptText="Search..." HBox.hgrow="NEVER">
+                <TextField fx:id="filterField" prefHeight="31.0" prefWidth="190.0" promptText="Search..." HBox.hgrow="NEVER">
                     <HBox.margin>
                         <Insets top="3.0" />
                     </HBox.margin></TextField>
@@ -51,12 +51,12 @@
                     </opaqueInsets></Pane>
                 <Pane prefHeight="63.0" prefWidth="182.0" style="-fx-background-color: #DBE9F4;">
                     <children>
-                        <Label alignment="TOP_CENTER" layoutX="46.0" layoutY="6.0" text="Currently playing:">
+                        <Label alignment="TOP_CENTER" layoutX="38.0" layoutY="6.0" text="Currently playing:">
                             <font>
                                 <Font name="System Bold" size="13.0" />
                             </font>
                         </Label>
-                        <Label fx:id="lblCurrentSong" alignment="CENTER" layoutX="54.0" layoutY="23.0" text="-placeholder-">
+                        <Label fx:id="lblCurrentSong" alignment="CENTER" layoutX="48.0" layoutY="23.0" text="-placeholder-">
                             <font>
                                 <Font name="System Bold" size="13.0" />
                             </font>
@@ -78,14 +78,14 @@
         </HBox>
     </top>
     <left>
-        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="791.0" prefWidth="361.0" style="-fx-region-background: #76ACCE;" BorderPane.alignment="TOP_LEFT">
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="781.0" prefWidth="362.0" style="-fx-region-background: #76ACCE;" BorderPane.alignment="TOP_LEFT">
             <children>
                 <VBox alignment="CENTER_LEFT" layoutY="42.0" prefHeight="508.0" prefWidth="373.0" spacing="8.0" AnchorPane.bottomAnchor="247.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="42.0">
                     <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                     </padding>
                     <children>
-                        <Label alignment="TOP_LEFT" prefHeight="28.0" prefWidth="80.0" styleClass="section-title" text="Songs" textFill="WHITE" VBox.vgrow="ALWAYS">
+                        <Label alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="105.0" styleClass="section-title" text="Songs" textFill="WHITE" VBox.vgrow="ALWAYS">
                             <font>
                                 <Font name="System Bold" size="30.0" />
                             </font>
@@ -106,7 +106,7 @@
                                 <Insets right="8.0" top="8.0" />
                             </padding>
                             <children>
-                                <Button fx:id="btnNewSong" mnemonicParsing="false" onAction="#onNewSongButtonAction" text="New..." HBox.hgrow="NEVER">
+                                <Button fx:id="btnNewSong" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onNewSongButtonAction" text="New..." HBox.hgrow="NEVER">
                                     <font>
                                         <Font name="System Bold" size="16.0" />
                                     </font>
@@ -116,13 +116,13 @@
                                         <Font name="System Bold" size="16.0" />
                                     </font>
                                 </Button>
-                                <Button fx:id="btnDeleteSong" mnemonicParsing="false" onAction="#onDeleteSongAction" text="Delete" HBox.hgrow="NEVER">
+                                <Button fx:id="btnDeleteSong" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onDeleteSongAction" text="Delete" HBox.hgrow="NEVER">
                                     <font>
                                         <Font name="System Bold" size="16.0" />
                                     </font>
                                 </Button>
                                 <Pane prefHeight="31.0" prefWidth="243.0" />
-                                <Button fx:id="btnClose" mnemonicParsing="false" onAction="#onCloseButtonAction" text="Close">
+                                <Button fx:id="btnClose" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onCloseButtonAction" text="Close" HBox.hgrow="ALWAYS">
                                     <font>
                                         <Font name="System Bold" size="16.0" />
                                     </font>
@@ -159,7 +159,7 @@
                                         <Font name="System Bold" size="13.0" />
                                     </font>
                                 </Button>
-                                <Pane prefHeight="53.0" prefWidth="103.0" />
+                                <Pane prefHeight="35.0" prefWidth="98.0" />
                                 <Button fx:id="btnDeleteSongInPlaylist" mnemonicParsing="false" onAction="#onDeleteSongInPlaylistAction" prefHeight="26.0" prefWidth="65.0" text="Delete" HBox.hgrow="NEVER">
                                     <font>
                                         <Font name="System Bold" size="13.0" />
@@ -178,7 +178,7 @@
     <right>
         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="320.0" BorderPane.alignment="CENTER_LEFT">
             <children>
-                <Button layoutX="4.0" layoutY="38.0" mnemonicParsing="false" onAction="#onAddSongToPlaylistButtonAction" style="-fx-background-color: black;" text="&lt;" textFill="WHITE">
+                <Button layoutX="3.0" layoutY="39.0" mnemonicParsing="false" onAction="#onAddSongToPlaylistButtonAction" style="-fx-background-color: black;" text="&lt;" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="13.0" />
                     </font>
@@ -190,23 +190,23 @@
                         <TableColumn fx:id="colPlaylistDuration" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="Duration" />
                     </columns>
                 </TableView>
-                <HBox alignment="CENTER_LEFT" layoutX="30.0" layoutY="541.0" maxWidth="-Infinity" prefHeight="59.0" prefWidth="292.0" spacing="8.0">
+                <HBox alignment="CENTER_LEFT" layoutX="31.0" layoutY="541.0" maxWidth="-Infinity" prefHeight="59.0" prefWidth="291.0" spacing="8.0">
                     <padding>
                         <Insets right="8.0" top="8.0" />
                     </padding>
                     <children>
-                        <Button fx:id="btnNewPlaylist" mnemonicParsing="false" onAction="#onNewButtonPlaylistAction" prefHeight="31.0" prefWidth="63.0" text="New..." HBox.hgrow="NEVER">
+                        <Button fx:id="btnNewPlaylist" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onNewButtonPlaylistAction" prefHeight="36.8" prefWidth="68.0" text="New..." HBox.hgrow="NEVER">
                             <font>
                                 <Font name="System Bold" size="16.0" />
                             </font>
                         </Button>
-                        <Button fx:id="btnEditPlaylist" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onEditButtonPlaylistAction" text="Edit..." HBox.hgrow="NEVER">
+                        <Button fx:id="btnEditPlaylist" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onEditButtonPlaylistAction" prefHeight="36.8" prefWidth="63.2" text="Edit..." HBox.hgrow="NEVER">
                             <font>
                                 <Font name="System Bold" size="16.0" />
                             </font>
                         </Button>
-                        <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="51.0" prefWidth="66.0" />
-                        <Button fx:id="btnDeletePlaylist" mnemonicParsing="false" onAction="#onDeleteButtonPlaylistAction" prefHeight="31.0" prefWidth="68.0" text="Delete" HBox.hgrow="NEVER">
+                        <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="51.0" prefWidth="54.0" />
+                        <Button fx:id="btnDeletePlaylist" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onDeleteButtonPlaylistAction" prefHeight="36.8" prefWidth="69.6" text="Delete" HBox.hgrow="NEVER">
                             <font>
                                 <Font name="System Bold" size="16.0" />
                             </font>
