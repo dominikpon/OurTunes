@@ -141,7 +141,7 @@
                     <children>
                         <TableView fx:id="playlistSongsTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="476.0" prefWidth="218.0">
                             <columns>
-                        <TableColumn fx:id="colSongInPlaylist" maxWidth="300.0" minWidth="211.53903198242188" prefWidth="216.99996948242188" resizable="false" />
+                                <TableColumn fx:id="colSongInPlaylist" maxWidth="300.0" minWidth="211.53903198242188" prefWidth="216.99996948242188" resizable="false" />
                             </columns>
                             <VBox.margin>
                                 <Insets left="50.0" top="67.0" />
