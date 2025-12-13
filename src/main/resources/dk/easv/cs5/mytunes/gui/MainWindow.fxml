@@ -78,7 +78,7 @@
         </HBox>
     </top>
     <left>
-        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="781.0" prefWidth="362.0" style="-fx-region-background: #76ACCE;" BorderPane.alignment="TOP_LEFT">
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="781.0" prefWidth="362.0" style="-fx-background-color: #76ACCE;" BorderPane.alignment="TOP_LEFT">
             <children>
                 <VBox alignment="CENTER_LEFT" layoutY="42.0" prefHeight="508.0" prefWidth="373.0" spacing="8.0" AnchorPane.bottomAnchor="247.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="42.0">
                     <padding>
