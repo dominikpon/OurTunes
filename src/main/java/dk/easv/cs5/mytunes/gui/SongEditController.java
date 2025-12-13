@@ -5,6 +5,7 @@ import dk.easv.cs5.mytunes.be.Genre;
 import dk.easv.cs5.mytunes.be.Song;
 import dk.easv.cs5.mytunes.bll.ILogic;
 import dk.easv.cs5.mytunes.bll.Logic;
+import dk.easv.cs5.mytunes.bll.exceptions.LogicException;
 import dk.easv.cs5.mytunes.gui.helpers.AlertHelper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -83,10 +84,10 @@ public class SongEditController {
         stage.close();
     }
     @FXML
-    private void onSaveButton(ActionEvent actionEvent) {
+    private void onSaveButton(ActionEvent actionEvent) throws LogicException {
         String title = txtTitle.getText().trim();
         String artist = txtArtist.getText().trim();
-        Genre selectedGenre = (Genre) comboGenre.getSelectionModel().getSelectedItem();
+        Genre selectedGenre = comboGenre.getSelectionModel().getSelectedItem();
         String duration = txtDuration.getText().trim();
         String path = txtPath.getText().trim();
 
@@ -112,6 +113,18 @@ public class SongEditController {
             AlertHelper.showError("Invalid duration format. Please enter mm:ss or duration in seconds.");
             return;
         }
+        //f
+
+        if (selectedGenre.getId() == 0){
+            logic.createGenre(selectedGenre);
+
+        }
+        System.out.println("Saving song:");
+        System.out.println("Title: " + title);
+        System.out.println("Artist: " + artist);
+        System.out.println("Genre: " + selectedGenre.getName() + " id=" + selectedGenre.getId());
+        System.out.println("Duration: " + durationInSeconds);
+        System.out.println("Path: " + path);
         Song song = new Song(title, artist, selectedGenre, durationInSeconds, path);
 
             try {

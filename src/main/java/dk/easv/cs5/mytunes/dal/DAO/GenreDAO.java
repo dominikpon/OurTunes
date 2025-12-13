@@ -19,11 +19,16 @@ public class GenreDAO implements IGenreDAO {
         String sql = "INSERT INTO Genres (name) VALUES (?)";
 
         try( Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)){
-
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, genre.getName());
-
             stmt.executeUpdate();
+        try (ResultSet rs = stmt.getGeneratedKeys()) {
+            if (rs.next()) {
+                int generatedId = rs.getInt(1);
+                genre.setId(generatedId);
+            }
+        }
+
         }
         catch (SQLException e){
             e.printStackTrace();

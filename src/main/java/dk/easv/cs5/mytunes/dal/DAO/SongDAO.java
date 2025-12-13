@@ -23,7 +23,7 @@ public class SongDAO implements ISongDAO  {
         String sql = "INSERT INTO Songs (title, artist, genreId, duration, filePath ) VALUES (?,?,?,?,?)";
 
         try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)){
+             PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             ps.setString (1, song.getTitle());
             ps.setString (2, song.getArtist());
@@ -43,6 +43,7 @@ public class SongDAO implements ISongDAO  {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException();
         }
 
     }

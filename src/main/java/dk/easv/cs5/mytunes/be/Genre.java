@@ -17,6 +17,10 @@ public class Genre {
     public int getId() {
         return id;
     }
+    //Setting ID should be only called by DAO after inserting (genre) to the database
+    public void setId(int generatedId) {
+        this.id = generatedId;
+    }
     public String getName() {
         return name;
     }
@@ -27,5 +31,6 @@ public class Genre {
     public String toString() {
         return name;
     }
+
 
 }
