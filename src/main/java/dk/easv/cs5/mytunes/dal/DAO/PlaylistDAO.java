@@ -70,7 +70,19 @@ public class PlaylistDAO implements IPlaylistDAO {
 
     @Override
     public void deleteSongFromPlaylist(int songId, int playlistId) {
+        String sql = "DELETE FROM PlaylistSongs WHERE songId = ? and playlistId = ?";
 
+        try {
+            Connection conn = getConnection();
+                    PreparedStatement ps = conn.prepareStatement(sql);
+                    {
+                        ps.setInt(1, songId);
+                        ps.setInt(2, playlistId);
+                        ps.executeUpdate();
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException("Error deleting playlist song");
+        }
     }
 
     @Override

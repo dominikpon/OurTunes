@@ -55,7 +55,11 @@ public class Logic implements ILogic {
     }
 
     @Override
-    public void deleteSong(Song song) {
+    public void deleteSong(Song song)
+    {
+        if(song.getId() == 0){
+            return;
+        }
         songDAO.remove(song.getId());
 
     }
@@ -120,6 +124,9 @@ public class Logic implements ILogic {
     public void removeSongFromPlaylist(Song song, Playlist playlist) {
         int songId = song.getId();
         int playlistId = playlist.getId();
+        if(songId == 0 || playlistId == 0){
+            return;
+        }
         playlistDAO.deleteSongFromPlaylist(playlistId, songId);
 
     }

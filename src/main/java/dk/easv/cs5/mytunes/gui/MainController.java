@@ -26,6 +26,7 @@ import java.io.IOException;
 public class MainController {
 
 
+
     //Buttons
 
 
@@ -47,6 +48,8 @@ public class MainController {
     @FXML private TableView<Song> playlistSongsTable;
     @FXML private TableColumn colSongInPlaylist;
 
+    @FXML private Button btnDeleteSongFromPlaylist; //this is only for disabling
+
 
     //Observable lists for manual refreshing of Lists
     private ObservableList<Song> songList = FXCollections.observableArrayList();
@@ -55,6 +58,7 @@ public class MainController {
 
     private Song lastSelectedSong;
     private Playlist lastSelectedPlaylist;
+
 
     private ILogic logic = new Logic();
     @FXML
@@ -170,22 +174,16 @@ public class MainController {
     }
     @FXML
     private void onDeleteSongAction(ActionEvent actionEvent) {
-        deleteSong();
-    }
-    private void deleteSong() {
         Song selectedSong = songsTable.getSelectionModel().getSelectedItem();
+
 
         if (selectedSong == null) {
             AlertHelper.showError("Please select a song to delete.");
             return;
         }
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete Song");
-        alert.setHeaderText("Are you sure you want to delete this song?");
-        alert.setContentText(selectedSong.getTitle());
 
-        alert.showAndWait().ifPresent(response -> {
+        AlertHelper.showConfirmation(selectedSong.getTitle()).ifPresent(response -> {
             if (response == ButtonType.OK) {
                 try {
                     // 1) Delete from database
@@ -213,13 +211,42 @@ public class MainController {
     }
 
     @FXML
+    private void onDeleteSongFromPlaylistAction(ActionEvent actionEvent) {
+        Song lastSelectedSong = playlistSongsTable.getSelectionModel().getSelectedItem();
+        Playlist lastSelectedPlaylist = playlistsTable.getSelectionModel().getSelectedItem();
+
+        if (lastSelectedSong == null) {
+            AlertHelper.showError("Please select a song to delete from the playlist.");
+            return;}
+
+        if (lastSelectedPlaylist == null) {
+            AlertHelper.showError("Please select a playlist.");
+            return;
+        }
+        AlertHelper.showConfirmation(lastSelectedSong.getTitle()).ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    logic.removeSongFromPlaylist(lastSelectedSong,lastSelectedPlaylist);
+                    playlistSongList.removeIf(s -> s.getId() == lastSelectedSong.getId());
+                    playlistSongsTable.refresh();
+
+                    lastSelectedPlaylist.setSongList(playlistSongList);
+                    playlistsTable.refresh();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    AlertHelper.showError("Could not delete the selected song.\n" + e.getMessage());
+                }
+
+            }
+        });
+
+    }
+
+    @FXML
     private void onUpButtonAction(ActionEvent actionEvent) {
     }
     @FXML
     private void onDownButtonAction(ActionEvent actionEvent) {
-    }
-    @FXML
-    private void onDeleteSongInPlaylistAction(ActionEvent actionEvent) {
     }
 
     @FXML
@@ -274,6 +301,7 @@ public class MainController {
 
         System.out.println("Added: " + lastSelectedSong.getTitle()+ " to " + lastSelectedPlaylist.getName()); //If I try to add lastSelectedPlaylist.getName() it just shows ID of playlist
     }
+
 
 }
 

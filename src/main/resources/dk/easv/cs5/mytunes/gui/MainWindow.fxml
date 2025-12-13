@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="687.0" prefWidth="927.0" style="-fx-background-color: #76ACCE;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.cs5.mytunes.gui.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="687.0" prefWidth="927.0" style="-fx-background-color: #76ACCE;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.cs5.mytunes.gui.MainController">
     <top>
         <HBox prefHeight="44.0" prefWidth="1286.0" spacing="10.0" BorderPane.alignment="CENTER_LEFT">
             <padding>
@@ -160,7 +160,7 @@
                                     </font>
                                 </Button>
                                 <Pane prefHeight="35.0" prefWidth="98.0" />
-                                <Button fx:id="btnDeleteSongInPlaylist" mnemonicParsing="false" onAction="#onDeleteSongInPlaylistAction" prefHeight="26.0" prefWidth="65.0" text="Delete" HBox.hgrow="NEVER">
+                                <Button fx:id="btnDeleteSongFromPlaylist" mnemonicParsing="false" onAction="#onDeleteSongFromPlaylistAction" prefHeight="26.0" prefWidth="65.0" text="Delete" HBox.hgrow="NEVER">
                                     <font>
                                         <Font name="System Bold" size="13.0" />
                                     </font>

@@ -2,7 +2,6 @@ package dk.easv.cs5.mytunes.dal.DAO;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import dk.easv.cs5.mytunes.be.Genre;
-import dk.easv.cs5.mytunes.be.Playlist;
 import dk.easv.cs5.mytunes.dal.ConnectionManager;
 import dk.easv.cs5.mytunes.dal.DAOInterface.IGenreDAO;
 

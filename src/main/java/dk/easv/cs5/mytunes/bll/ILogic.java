@@ -20,7 +20,7 @@ public interface ILogic {
     public void editPlaylist(Playlist playlist);
 
     public void addSongToPlaylist(Song song, Playlist playlist);
-    public void removeSongFromPlaylist(Song song,  Playlist playlist);
+    public void removeSongFromPlaylist(Song song,  Playlist playlist) throws SQLException;
     public void moveSongInPlaylist(Song song, Playlist playlist);
 
     List<Genre> getAllGenres();     //List of genres for populating comboBox and filtering
