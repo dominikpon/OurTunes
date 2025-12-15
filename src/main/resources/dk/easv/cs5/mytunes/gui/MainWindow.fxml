@@ -38,13 +38,12 @@
                     </HBox.margin></Button>
                 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="63.0" prefWidth="158.0" style="-fx-background-color: #DBE9F4;">
                     <children>
-                        <Button fx:id="btnPreviousSong" layoutX="9.0" layoutY="8.0" mnemonicParsing="false" onAction="#onPreviousSongButtonAction" style="-fx-background-color: black;" text="⏮" textFill="WHITE" />
-                        <Button fx:id="btnPlayPauseSong" layoutX="62.0" layoutY="8.0" mnemonicParsing="false" onAction="#onPlayPauseButtonAction" style="-fx-background-color: black;" text="⏵/⏸" textFill="WHITE" />
-                        <Button fx:id="btnNextSong" layoutX="119.0" layoutY="8.0" mnemonicParsing="false" onAction="#onNextSongButtonAction" style="-fx-background-color: black;" text="⏭" textFill="WHITE">
+                        <Button fx:id="btnPreviousSong" layoutX="9.0" layoutY="18.0" mnemonicParsing="false" onAction="#onPreviousSongButtonAction" style="-fx-background-color: black;" text="⏮" textFill="WHITE" />
+                        <Button fx:id="btnPlayPauseSong" layoutX="62.0" layoutY="18.0" mnemonicParsing="false" onAction="#onPlayPauseButtonAction" style="-fx-background-color: black;" text="⏵/⏸" textFill="WHITE" />
+                        <Button fx:id="btnNextSong" layoutX="119.0" layoutY="18.0" mnemonicParsing="false" onAction="#onNextSongButtonAction" style="-fx-background-color: black;" text="⏭" textFill="WHITE">
                             <font>
                                 <Font name="System Bold" size="13.0" />
                             </font></Button>
-                        <Slider fx:id="durationSlider" layoutX="9.0" layoutY="42.0" style="-fx-background-color: black;" />
                     </children>
                     <opaqueInsets>
                         <Insets left="10.0" />
