@@ -76,12 +76,12 @@
                 </HBox>
 
                 <!-- DURATION -->
-                <TextField fx:id="txtDuration" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <TextField fx:id="txtDuration" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
                 <!-- FILE (TextField + Choose Button) -->
                 <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4">
                     <children>
-                        <TextField fx:id="txtPath" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="txtPath" editable ="false" HBox.hgrow="ALWAYS" />
                         <Button fx:id="btnChoosePath" onAction="#onChoosePath" style="-fx-background-color: gray;" text="Choose" textFill="WHITE">
                             <font><Font name="System Bold" size="13" /></font>
                         </Button>

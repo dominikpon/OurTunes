@@ -1,7 +1,6 @@
 package dk.easv.cs5.mytunes.gui;
 
 import dk.easv.cs5.mytunes.Application;
-import dk.easv.cs5.mytunes.be.Genre;
 import dk.easv.cs5.mytunes.be.Playlist;
 import dk.easv.cs5.mytunes.be.Song;
 import dk.easv.cs5.mytunes.bll.ILogic;
@@ -19,6 +18,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import java.io.File;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -61,10 +63,11 @@ public class MainController {
 
 
     private ILogic logic = new Logic();
+
+    private MediaPlayer mp;
+    private Song currentlyPlayingSong;
     @FXML
     private void initialize() throws LogicException {
-
-
 
         //set columns for Songs table
         colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -111,6 +114,8 @@ public class MainController {
 
     }
 
+
+
     private void trackLastSelectedPlaylist(){
         playlistsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
         {
@@ -138,6 +143,9 @@ public class MainController {
 
     private void loadSongsForPlaylist(int playlistId){
         try {
+            ObservableList <Song> songs = FXCollections.observableArrayList(
+            logic.getAllSongsInPlaylist(playlistId));
+            lastSelectedPlaylist.setSongList(songs);
             playlistSongList.setAll(logic.getAllSongsInPlaylist(playlistId));
             playlistSongsTable.refresh();
         } catch (Exception e) {
@@ -168,9 +176,50 @@ public class MainController {
     }
     @FXML
     private void onPlayPauseButtonAction(ActionEvent actionEvent) {
+        Song selectedSong = songsTable.getSelectionModel().getSelectedItem();
+
+        if (selectedSong == null) {
+            selectedSong = playlistSongsTable.getSelectionModel().getSelectedItem();
+        }
+        if (selectedSong == null) {
+            AlertHelper.showInfo("Please select a song to play");
+            return;
+        }
+
+        handlePlayPause(selectedSong);
     }
     @FXML
     private void onNextSongButtonAction(ActionEvent actionEvent) {
+    }
+    private void handlePlayPause(Song selectedSong) {
+        if(currentlyPlayingSong != null && selectedSong.getId() == currentlyPlayingSong.getId()) {
+            if (mp.getStatus() == MediaPlayer.Status.PLAYING) {
+                mp.pause();
+            } else  {
+                mp.play();
+            }
+        }else
+            playSong(selectedSong);
+
+    }
+
+
+    private void playSong(Song song) {
+        if (mp != null) {
+            mp.stop();
+        }
+
+        try {
+            File file = new File(song.getFilePath());
+            Media media = new Media(file.toURI().toString());
+            mp = new MediaPlayer(media);
+            mp.play();
+
+            currentlyPlayingSong = song;
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertHelper.showError("Could not play song " + song.getTitle() + "\n" + e.getMessage());
+        }
     }
     @FXML
     private void onEditSongButtonAction(ActionEvent actionEvent) throws IOException {
@@ -218,8 +267,8 @@ public class MainController {
                     // 3) Remove from playlist table (if it's there)
                     playlistSongList.removeIf(s -> s.getId() == lastSelectedSong.getId());
                     playlistSongsTable.refresh();
-
-                    lastSelectedPlaylist.setSongList(playlistSongList);
+                    if(lastSelectedPlaylist != null) {
+                    lastSelectedPlaylist.setSongList(playlistSongList);}
                     playlistsTable.refresh();
 
                 } catch (Exception e) {

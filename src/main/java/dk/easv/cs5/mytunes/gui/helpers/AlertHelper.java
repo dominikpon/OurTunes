@@ -34,7 +34,7 @@ public class AlertHelper {
     public static Optional<ButtonType> showConfirmation(String message){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete");
-        alert.setHeaderText("Are you sure you want to delete this song?");
+        alert.setHeaderText("Are you sure you want to delete it?");
         alert.setContentText(message);
         return alert.showAndWait();
     }

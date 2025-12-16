@@ -14,6 +14,7 @@ import dk.easv.cs5.mytunes.dal.DAOInterface.ISongDAO;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Logic implements ILogic {
     private ISongDAO songDAO = new SongDAO();
@@ -44,6 +45,11 @@ public class Logic implements ILogic {
         if(song.getFilePath() == null  ){
             throw new LogicException("File path is empty!");
         }
+        String path = song.getFilePath().toLowerCase();
+        if(!path.endsWith(".mp3") && (path.endsWith(".wav")))  {
+            throw new LogicException("File path must end with .wav or .mp3!");
+        }
+
 
         try {songDAO.save(song);
 
