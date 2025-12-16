@@ -45,7 +45,22 @@ public class PlaylistDAO implements IPlaylistDAO {
     }
 
     @Override
-    public void remove(int playlistId) {
+    public void remove(int id){
+
+        String deleteFromPlaylist = "DELETE FROM Playlists WHERE id = ?";
+        String deleteFromPlaylistSongs = "DELETE FROM PlaylistSongs WHERE playlistId = ?";
+
+        try(Connection conn = getConnection();
+            PreparedStatement ps2 = conn.prepareStatement(deleteFromPlaylist); //intentionally reversed because it matters
+            PreparedStatement ps1 = conn.prepareStatement(deleteFromPlaylistSongs)){ //firstly I need to remove playlist from PlaylistSongs
+
+                ps1.setInt(1,id);
+                ps2.setInt(1,id);
+                ps1.executeUpdate();
+                ps2.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Could not delete playlist");
+        }
 
     }
 

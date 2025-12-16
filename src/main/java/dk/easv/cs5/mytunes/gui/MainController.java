@@ -296,6 +296,26 @@ public class MainController {
     }
     @FXML
     private void onDeleteButtonPlaylistAction(ActionEvent actionEvent) {
+        Playlist lastSelectedPlaylist = playlistsTable.getSelectionModel().getSelectedItem();
+        if (lastSelectedPlaylist == null) {
+            AlertHelper.showError("Please select a playlist to delete.");
+            return;
+        }
+        AlertHelper.showConfirmation(lastSelectedPlaylist.getName()).ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    logic.deletePlaylist(lastSelectedPlaylist);
+                    playlistList.remove(lastSelectedPlaylist);
+                    playlistSongList.remove(lastSelectedPlaylist);
+                    playlistSongsTable.refresh();
+                    playlistsTable.refresh();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    AlertHelper.showError("Could not delete the selected playlist.\n" + e.getMessage());
+                }
+
+            }
+        });
     }
     @FXML
     private void onCloseButtonAction(ActionEvent actionEvent) {

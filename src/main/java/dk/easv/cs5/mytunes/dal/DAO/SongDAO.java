@@ -79,11 +79,11 @@ public class SongDAO implements ISongDAO  {
         try(Connection conn = getConnection()) {
 
     //Remove songs from PlaylistSongs
-    try (PreparedStatement ps1 = conn.prepareStatement(deleteFromPlaylistSongs)){
+     PreparedStatement ps1 = conn.prepareStatement(deleteFromPlaylistSongs);{
             ps1.setInt(1, id);
             ps1.executeUpdate();
      }
-     try (PreparedStatement ps2 = conn.prepareStatement(deleteFromSongs)){
+     PreparedStatement ps2 = conn.prepareStatement(deleteFromSongs);{
             ps2.setInt(1,id);
             ps2.executeUpdate();
             }

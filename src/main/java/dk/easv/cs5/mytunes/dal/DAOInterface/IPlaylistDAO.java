@@ -10,7 +10,7 @@ public interface IPlaylistDAO  {
 
     public void save(Playlist playlist) throws SQLException;
     public void edit(Playlist playlist);
-    public void remove(int playlistId);
+    public void remove(int id);
 
     public void addSongToPlaylist(int songId, int playlistId);
     public void deleteSongFromPlaylist(int songId, int playlistId);

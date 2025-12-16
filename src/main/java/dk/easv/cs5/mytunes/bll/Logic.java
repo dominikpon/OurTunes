@@ -120,12 +120,19 @@ public class Logic implements ILogic {
 
     @Override
     public void deletePlaylist(Playlist playlist) {
+        if(playlist.getId() == 0){
+            return;
+        }
         playlistDAO.remove(playlist.getId());
 
     }
 
     @Override
     public void editPlaylist(Playlist playlist) {
+        if(playlist.getId() == 0){
+            return;
+        }
+
         playlistDAO.edit(playlist);
 
     }

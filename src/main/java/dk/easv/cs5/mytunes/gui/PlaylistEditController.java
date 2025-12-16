@@ -52,10 +52,12 @@ public class PlaylistEditController {
 
         if(!missingFields.isEmpty()) {
             AlertHelper.showWarning("Missing Fields" + missingFields);
+            return;
         }
-        Playlist playlist = new Playlist(name);
+
 
         try {
+            Playlist playlist = new Playlist(name);
             logic.createPlaylist(playlist);
             playlistList.add(playlist);
             AlertHelper.showInfo("Playlist Created");
