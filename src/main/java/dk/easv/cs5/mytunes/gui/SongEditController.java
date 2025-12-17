@@ -27,8 +27,6 @@ import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -181,49 +179,40 @@ public class SongEditController {
                 AlertHelper.showError("An error occured while trying to save the song! ");
                 e.printStackTrace();}
     }
+
+
+
+
+
     public void onChoosePath(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose a song file");
         fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Audio Files", "*.mp3","*.wav", "*aac", "*flac"));
-
+            new FileChooser.ExtensionFilter("Audio Files", "*.mp3","*.wav"));
         File file = fileChooser.showOpenDialog(btnChoosePath.getScene().getWindow());
         if (file != null) {
+            selectedFile = file;
+            String baseFolder = "src/main/resources/songs/";
+            String relativePath = baseFolder + selectedFile.getName();
+            txtPath.setText(relativePath);
             try {
-                // Destination folder inside your project
-                String baseFolder = "src/main/resources/songs/";
-                File targetFolder = new File(baseFolder);
-                if (!targetFolder.exists()) targetFolder.mkdirs(); // Create folder if missing
-
-                // Copy file into resources folder
-                File destFile = new File(targetFolder, file.getName());
-                Files.copy(file.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-                // Save relative path to txtPath
-                String relativePath = baseFolder + file.getName();
-                txtPath.setText(relativePath);
-
-                // Store selected file for later use if needed
-                selectedFile = destFile;
-
-                // Get duration using MediaPlayer
-                Media media = new Media(destFile.toURI().toString());
+                Media media = new Media(file.toURI().toString());
                 MediaPlayer mediaPlayer = new MediaPlayer(media);
                 mediaPlayer.setOnReady(() -> {
                     int durationInSeconds = (int) media.getDuration().toSeconds();
                     int minutes = durationInSeconds / 60;
-                    int seconds = durationInSeconds % 60;
-                    String formattedDuration = String.format("%02d:%02d", minutes, seconds);
-                    txtDuration.setText(formattedDuration);
-                });
+                    int seconds = durationInSeconds - minutes * 60;
+                    String formatedDuration = String.format("%02d:%02d", minutes, seconds);
 
+                    txtDuration.setText(formatedDuration);
+                });
             } catch (Exception e) {
                 e.printStackTrace();
-                AlertHelper.showError("Could not copy or read the file!");
+                AlertHelper.showError("Cannot read the duration from the file!");
             }
         }
-    }
 
+    }
 
     public void onMoreGenresButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/GenreWindow.fxml"));
