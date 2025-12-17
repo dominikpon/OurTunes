@@ -338,10 +338,62 @@ public class MainController {
 
     @FXML
     private void onUpButtonAction(ActionEvent actionEvent) {
+        if (playlistSongList.isEmpty()) return; // No songs in playlist
+
+        int currentIndex = -1;
+
+        // Find the index of the currently playing song
+        if (currentlyPlayingSong != null) {
+            for (int i = 0; i < playlistSongList.size(); i++) {
+                if (playlistSongList.get(i).getId() == currentlyPlayingSong.getId()) {
+                    currentIndex = i;
+                    break;
+                }
+            }
+        }
+
+        // Move to previous song
+        int previousIndex;
+        if (currentIndex == -1) {
+            previousIndex = 0; // Nothing playing, start with first song
+        } else {
+            previousIndex = currentIndex - 1;
+            if (previousIndex < 0) previousIndex = playlistSongList.size() - 1; // Loop to last song
+        }
+
+        Song songToPlay = playlistSongList.get(previousIndex);
+        playSong(songToPlay);
     }
+
     @FXML
     private void onDownButtonAction(ActionEvent actionEvent) {
+        if (playlistSongList.isEmpty()) return; // No songs in playlist
+
+        int currentIndex = -1;
+
+        // Find the index of the currently playing song
+        if (currentlyPlayingSong != null) {
+            for (int i = 0; i < playlistSongList.size(); i++) {
+                if (playlistSongList.get(i).getId() == currentlyPlayingSong.getId()) {
+                    currentIndex = i;
+                    break;
+                }
+            }
+        }
+
+        // Move to next song
+        int nextIndex;
+        if (currentIndex == -1) {
+            nextIndex = 0; // Nothing playing, start with first song
+        } else {
+            nextIndex = currentIndex + 1;
+            if (nextIndex >= playlistSongList.size()) nextIndex = 0; // Loop to first song
+        }
+
+        Song songToPlay = playlistSongList.get(nextIndex);
+        playSong(songToPlay);
     }
+
 
     @FXML
     private void onNewButtonPlaylistAction(ActionEvent actionEvent) throws IOException {
