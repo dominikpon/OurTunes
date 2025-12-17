@@ -22,7 +22,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import java.io.File;
 import javafx.stage.Stage;
-
+import javafx.util.Duration;
 import java.io.IOException;
 
 public class MainController {
@@ -173,7 +173,18 @@ public class MainController {
     }
     @FXML
     private void onPreviousSongButtonAction(ActionEvent actionEvent) {
+        if (mp == null) return;
+
+        Duration currentTime = mp.getCurrentTime();
+        Duration rewindTime = currentTime.subtract(Duration.seconds(5));
+
+        if (rewindTime.lessThan(Duration.ZERO)) {
+            rewindTime = Duration.ZERO;
+        }
+
+        mp.seek(rewindTime);
     }
+
     @FXML
     private void onPlayPauseButtonAction(ActionEvent actionEvent) {
         Song selectedSong = songsTable.getSelectionModel().getSelectedItem();
@@ -190,7 +201,19 @@ public class MainController {
     }
     @FXML
     private void onNextSongButtonAction(ActionEvent actionEvent) {
+        if (mp == null) return;
+
+        Duration currentTime = mp.getCurrentTime();
+        Duration totalDuration = mp.getTotalDuration();
+        Duration forwardTime = currentTime.add(Duration.seconds(5));
+
+        if (forwardTime.greaterThan(totalDuration)) {
+            forwardTime = totalDuration;
+        }
+
+        mp.seek(forwardTime);
     }
+
     private void handlePlayPause(Song selectedSong) {
         if(currentlyPlayingSong != null && selectedSong.getId() == currentlyPlayingSong.getId()) {
             if (mp.getStatus() == MediaPlayer.Status.PLAYING) {
