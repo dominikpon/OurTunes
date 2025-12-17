@@ -24,9 +24,13 @@ import java.io.File;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.IOException;
-import java.util.Collections;
 
 public class MainController {
+
+
+
+    //Buttons
+
 
     //Table with songs
 
@@ -45,9 +49,8 @@ public class MainController {
     //Table with Songs in Playlist
     @FXML private TableView<Song> playlistSongsTable;
     @FXML private TableColumn colSongInPlaylist;
+    @FXML private Slider volumeSlider;
 
-    @FXML private TextField filterField;
-    @FXML private Button searchButton;
 
 
     //Observable lists for manual refreshing of Lists
@@ -63,7 +66,6 @@ public class MainController {
 
     private MediaPlayer mp;
     private Song currentlyPlayingSong;
-
     @FXML
     private void initialize() throws LogicException {
 
@@ -76,7 +78,7 @@ public class MainController {
         colDuration.setCellValueFactory(cellData ->{
             int seconds = cellData.getValue().getDuration();
             String formatted = FormattingTool.format(seconds);
-                    return new ReadOnlyStringWrapper(formatted);
+            return new ReadOnlyStringWrapper(formatted);
         });
 
         //set columns for Playlists table
@@ -92,11 +94,13 @@ public class MainController {
         playlistsTable.setItems(playlistList);
         playlistSongsTable.setItems(playlistSongList);
 
+        volumeSlider.setValue(0.5);
+        changeVolume();
 
         //Tracking the last selected playlist
         trackLastSelectedPlaylist();
         //Tracking the last selected song
-        trackSongSelection();
+        trackLastSelectedSong();
 
 
 
@@ -105,6 +109,10 @@ public class MainController {
         //Load playlists from database
         playlistList.setAll(logic.getAllPlaylists());
         //Load songs in playlist from database
+
+
+
+
 
     }
 
@@ -123,32 +131,22 @@ public class MainController {
 
     }
 
-    private void trackSongSelection() {
-        //Tracking the last selected song firstly in Song table
+    private void trackLastSelectedSong() {
+        //Tracking the last selected song
         songsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
                 {
                     if (newValue != null) {
-                        playlistSongsTable.getSelectionModel().clearSelection();
                         lastSelectedSong = newValue;
                         System.out.println("Selected song: " + newValue);
                     }
                 }
         );
-        //Tracking the last selected song in Song table in playlist
-        playlistSongsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
-        {
-            if (newValue != null) {
-                songsTable.getSelectionModel().clearSelection();
-                lastSelectedSong = newValue;
-                System.out.println("Selected song: " + newValue);
-            }
-        });
     }
 
     private void loadSongsForPlaylist(int playlistId){
         try {
             ObservableList <Song> songs = FXCollections.observableArrayList(
-            logic.getAllSongsInPlaylist(playlistId));
+                    logic.getAllSongsInPlaylist(playlistId));
             lastSelectedPlaylist.setSongList(songs);
             playlistSongList.setAll(logic.getAllSongsInPlaylist(playlistId));
             playlistSongsTable.refresh();
@@ -161,51 +159,19 @@ public class MainController {
 
     @FXML
     private void onNewSongButtonAction(ActionEvent actionEvent) throws IOException {
-            FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/SongEditWindow.fxml"));
-            Parent root = fxmlLoader.load();
-            SongEditController controller = fxmlLoader.getController();
-            controller.setSongList(songList);
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setResizable(false);
-            stage.setTitle("New/Edit Song");
-            stage.setScene(scene);
-            stage.show();
-        }
-
-    private boolean isFiltered;
-
-    private void clearFilter() {
-        songsTable.setItems(songList);
-        filterField.clear();
-        searchButton.setText("Filter");
-        isFiltered = false;
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/SongEditWindow.fxml"));
+        Parent root = fxmlLoader.load();
+        SongEditController controller = fxmlLoader.getController();
+        controller.setSongList(songList);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setResizable(false);
+        stage.setTitle("New/Edit Song");
+        stage.setScene(scene);
+        stage.show();
     }
-
-        @FXML
+    @FXML
     private void onSearchButtonAction(ActionEvent actionEvent) {
-
-        if (isFiltered) {
-            clearFilter();
-            return;
-        }
-
-            String search = filterField.getText().toLowerCase().trim();
-                if(search.isEmpty()){
-                    songsTable.setItems(songList);
-                    return;
-                }
-               ObservableList<Song> filtered = FXCollections.observableArrayList();
-
-                for(Song s : songList) {
-                    if (s.getTitle().toLowerCase().contains(search) || (s.getArtist().toLowerCase().contains(search))){
-                        filtered.add(s);
-                    }
-                songsTable.setItems(filtered);
-                    searchButton.setText("Clear");
-                    isFiltered = true;
-            }
-
     }
     @FXML
     private void onPreviousSongButtonAction(ActionEvent actionEvent) {
@@ -223,12 +189,17 @@ public class MainController {
 
     @FXML
     private void onPlayPauseButtonAction(ActionEvent actionEvent) {
+        Song selectedSong = songsTable.getSelectionModel().getSelectedItem();
 
-        if (lastSelectedSong == null) {
+        if (selectedSong == null) {
+            selectedSong = playlistSongsTable.getSelectionModel().getSelectedItem();
+        }
+        if (selectedSong == null) {
             AlertHelper.showInfo("Please select a song to play");
+            return;
         }
 
-        handlePlayPause(lastSelectedSong);
+        handlePlayPause(selectedSong);
     }
     @FXML
     private void onNextSongButtonAction(ActionEvent actionEvent) {
@@ -267,6 +238,7 @@ public class MainController {
             File file = new File(song.getFilePath());
             Media media = new Media(file.toURI().toString());
             mp = new MediaPlayer(media);
+            mp.setVolume(volumeSlider.getValue());
             mp.play();
 
             currentlyPlayingSong = song;
@@ -274,6 +246,14 @@ public class MainController {
             e.printStackTrace();
             AlertHelper.showError("Could not play song " + song.getTitle() + "\n" + e.getMessage());
         }
+    }
+    @FXML
+    private void changeVolume() {
+        volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (mp != null) {
+                mp.setVolume(newVal.doubleValue());
+            }
+        });
     }
     @FXML
     private void onEditSongButtonAction(ActionEvent actionEvent) throws IOException {
@@ -322,7 +302,7 @@ public class MainController {
                     playlistSongList.removeIf(s -> s.getId() == lastSelectedSong.getId());
                     playlistSongsTable.refresh();
                     if(lastSelectedPlaylist != null) {
-                    lastSelectedPlaylist.setSongList(playlistSongList);}
+                        lastSelectedPlaylist.setSongList(playlistSongList);}
                     playlistsTable.refresh();
 
                 } catch (Exception e) {
@@ -368,29 +348,61 @@ public class MainController {
     }
 
     @FXML
-    private void moveSong(int direction) {
-        int index = playlistSongsTable.getSelectionModel().getSelectedIndex();
+    private void onUpButtonAction(ActionEvent actionEvent) {
+        if (playlistSongList.isEmpty()) return; // No songs in playlist
 
-        // Check if index is valid and within bounds
-        if (index < 0 || index + direction < 0 || index + direction >= playlistSongList.size()) {
-            return;
+        int currentIndex = -1;
+
+        // Find the index of the currently playing song
+        if (currentlyPlayingSong != null) {
+            for (int i = 0; i < playlistSongList.size(); i++) {
+                if (playlistSongList.get(i).getId() == currentlyPlayingSong.getId()) {
+                    currentIndex = i;
+                    break;
+                }
+            }
         }
 
-        // Swap the current song with the one above or below
-        Collections.swap(playlistSongList, index, index + direction);
+        // Move to previous song
+        int previousIndex;
+        if (currentIndex == -1) {
+            previousIndex = 0; // Nothing playing, start with first song
+        } else {
+            previousIndex = currentIndex - 1;
+            if (previousIndex < 0) previousIndex = playlistSongList.size() - 1; // Loop to last song
+        }
 
-        // Update selection to follow the moved song
-        playlistSongsTable.getSelectionModel().select(index + direction);
-    }
-
-    @FXML
-    private void onUpButtonAction(ActionEvent actionEvent) {
-        moveSong(-1); // Move up
+        Song songToPlay = playlistSongList.get(previousIndex);
+        playSong(songToPlay);
     }
 
     @FXML
     private void onDownButtonAction(ActionEvent actionEvent) {
-        moveSong(1); // Move down
+        if (playlistSongList.isEmpty()) return; // No songs in playlist
+
+        int currentIndex = -1;
+
+        // Find the index of the currently playing song
+        if (currentlyPlayingSong != null) {
+            for (int i = 0; i < playlistSongList.size(); i++) {
+                if (playlistSongList.get(i).getId() == currentlyPlayingSong.getId()) {
+                    currentIndex = i;
+                    break;
+                }
+            }
+        }
+
+        // Move to next song
+        int nextIndex;
+        if (currentIndex == -1) {
+            nextIndex = 0; // Nothing playing, start with first song
+        } else {
+            nextIndex = currentIndex + 1;
+            if (nextIndex >= playlistSongList.size()) nextIndex = 0; // Loop to first song
+        }
+
+        Song songToPlay = playlistSongList.get(nextIndex);
+        playSong(songToPlay);
     }
 
 
@@ -469,8 +481,8 @@ public class MainController {
         }
 
         boolean alreadyInPlaylist = playlistSongList.stream().anyMatch(s -> s.getId() == lastSelectedSong.getId());
-            if(alreadyInPlaylist){
-                AlertHelper.showError("Song " + lastSelectedSong.getTitle() + " already exists in playlist");
+        if(alreadyInPlaylist){
+            AlertHelper.showError("Song " + lastSelectedSong.getTitle() + " already exists in playlist");
             return;}
         logic.addSongToPlaylist(lastSelectedSong, lastSelectedPlaylist);
         lastSelectedPlaylist.getSongs().add(lastSelectedSong);
