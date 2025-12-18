@@ -6,10 +6,7 @@ import dk.easv.cs5.mytunes.be.Song;
 import dk.easv.cs5.mytunes.dal.ConnectionManager;
 import dk.easv.cs5.mytunes.dal.DAOInterface.IPlaylistDAO;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +26,16 @@ public class PlaylistDAO implements IPlaylistDAO {
 
         try {
             Connection conn = getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql);
+            PreparedStatement ps = conn.prepareStatement(sql,  Statement.RETURN_GENERATED_KEYS);
 
             ps.setString(1, playlist.getName());
             ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                int id = rs.getInt(1);
+                playlist.setId(id);
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
