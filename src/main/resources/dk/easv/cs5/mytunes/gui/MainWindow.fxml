@@ -38,12 +38,13 @@
                     </HBox.margin></Button>
                 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="63.0" prefWidth="158.0" style="-fx-background-color: #DBE9F4;">
                     <children>
-                        <Button fx:id="btnPreviousSong" layoutX="9.0" layoutY="18.0" mnemonicParsing="false" onAction="#onPreviousSongButtonAction" style="-fx-background-color: black;" text="⏮" textFill="WHITE" />
-                        <Button fx:id="btnPlayPauseSong" layoutX="62.0" layoutY="18.0" mnemonicParsing="false" onAction="#onPlayPauseButtonAction" style="-fx-background-color: black;" text="⏵/⏸" textFill="WHITE" />
-                        <Button fx:id="btnNextSong" layoutX="119.0" layoutY="18.0" mnemonicParsing="false" onAction="#onNextSongButtonAction" style="-fx-background-color: black;" text="⏭" textFill="WHITE">
+                        <Button fx:id="btnPreviousSong" layoutX="9.0" layoutY="8.0" mnemonicParsing="false" onAction="#onPreviousSongButtonAction" style="-fx-background-color: black;" text="⏮" textFill="WHITE" />
+                        <Button fx:id="btnPlayPauseSong" layoutX="62.0" layoutY="8.0" mnemonicParsing="false" onAction="#onPlayPauseButtonAction" style="-fx-background-color: black;" text="⏵/⏸" textFill="WHITE" />
+                        <Button fx:id="btnNextSong" layoutX="119.0" layoutY="8.0" mnemonicParsing="false" onAction="#onNextSongButtonAction" style="-fx-background-color: black;" text="⏭" textFill="WHITE">
                             <font>
                                 <Font name="System Bold" size="13.0" />
                             </font></Button>
+                  <Slider fx:id="timeSlider" min="0.0" value="0.0" max="1.0" layoutX="9.0" layoutY="39.0" style="-fx-background-color: black;" />
                     </children>
                     <opaqueInsets>
                         <Insets left="10.0" />
@@ -69,7 +70,7 @@
                                 <Font name="System Bold" size="30.0" />
                             </font>
                         </Label>
-                        <Slider fx:id="volumeSlider" min="0.0" max="1.0" value="0.5" prefHeight="26.0" prefWidth="171.0" />
+                        <Slider fx:id="volumeSlider" max="1.0" min="0.0" prefHeight="26.0" prefWidth="171.0" value="0.5" />
                     </children>
                 </VBox>
 
@@ -100,7 +101,7 @@
                                 <TableColumn fx:id="colDuration" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" resizable="false" text="Duration" />
                             </columns>
                         </TableView>
-                        <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="39.0" prefWidth="529.0" spacing="8.0" VBox.vgrow="NEVER">
+                        <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="39.0" prefWidth="541.0" spacing="8.0" VBox.vgrow="NEVER">
                             <padding>
                                 <Insets right="8.0" top="8.0" />
                             </padding>
@@ -121,7 +122,7 @@
                                     </font>
                                 </Button>
                                 <Pane prefHeight="31.0" prefWidth="243.0" />
-                                <Button fx:id="btnClose" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onCloseButtonAction" text="Close" HBox.hgrow="ALWAYS">
+                                <Button fx:id="btnClose" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onCloseButtonAction" text="Close app" HBox.hgrow="ALWAYS">
                                     <font>
                                         <Font name="System Bold" size="16.0" />
                                     </font>
@@ -136,7 +137,7 @@
     <center>
         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="444.0" prefWidth="176.0" BorderPane.alignment="TOP_LEFT">
             <children>
-                <VBox layoutX="-24.0" layoutY="-26.0" prefHeight="576.0" prefWidth="332.0">
+                <VBox alignment="BOTTOM_LEFT" layoutX="-24.0" layoutY="-19.0" prefHeight="571.0" prefWidth="332.0">
                     <children>
                         <TableView fx:id="playlistSongsTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="476.0" prefWidth="218.0">
                             <columns>
@@ -177,7 +178,7 @@
     <right>
         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="320.0" BorderPane.alignment="CENTER_LEFT">
             <children>
-                <Button layoutX="3.0" layoutY="39.0" mnemonicParsing="false" onAction="#onAddSongToPlaylistButtonAction" style="-fx-background-color: black;" text="&lt;" textFill="WHITE">
+                <Button layoutX="4.0" layoutY="45.0" mnemonicParsing="false" onAction="#onAddSongToPlaylistButtonAction" style="-fx-background-color: black;" text="&lt;" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="13.0" />
                     </font>

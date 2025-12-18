@@ -52,8 +52,9 @@ public class MainController {
     //Text for the currently playing song
     @FXML private Label lblCurrentSong;
 
-    //Volume slider
+    //Sliders
     @FXML private Slider volumeSlider;
+    @FXML private Slider timeSlider;
 
     //Observable lists for manual refreshing of Lists
     private ObservableList<Song> songList = FXCollections.observableArrayList();
@@ -111,6 +112,12 @@ public class MainController {
         playlistList.setAll(logic.getAllPlaylists());
         //Load songs in playlist from database
 
+        timeSlider.valueChangingProperty().addListener((obs, wasChanging, isChanging) -> {
+            if (!isChanging && mp != null) {
+                mp.seek(Duration.seconds(timeSlider.getValue()));
+            }
+        });
+
         //Setting the initial volume value to 50% of the bar
         volumeSlider.setValue(0.5);
 
@@ -119,6 +126,8 @@ public class MainController {
                 mp.setVolume(newVal.doubleValue());
             }
         });
+
+        timeSlider.setDisable(true);
 
     }
 
@@ -284,8 +293,25 @@ public class MainController {
             mp.setVolume(volumeSlider.getValue());
             mp.play();
 
+            timeSlider.setDisable(false);
+            timeSlider.setValue(0);
+
+            mp.setOnReady(() -> {
+                Duration total = mp.getMedia().getDuration();
+                timeSlider.setMax(total.toSeconds());
+            });
+
+            mp.currentTimeProperty().addListener((obs, oldTime, newTime) -> {
+                if (!timeSlider.isValueChanging()) {
+                    timeSlider.setValue(newTime.toSeconds());
+                }
+            });
+
+
             currentlyPlayingSong = song;
             lblCurrentSong.setText(song.getTitle());
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
