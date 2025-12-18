@@ -193,7 +193,7 @@ public class MainController {
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setResizable(false);
-            stage.setTitle("New/Edit Song");
+            stage.setTitle("New Song");
             stage.setScene(scene);
             stage.show();
         }
@@ -378,7 +378,7 @@ public class MainController {
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setResizable(false);
-            stage.setTitle("New/Edit Song");
+            stage.setTitle("Edit Song");
             stage.setScene(scene);
             stage.show();
         }
@@ -493,7 +493,7 @@ public class MainController {
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setResizable(false);
-        stage.setTitle("New/Edit Playlist");
+        stage.setTitle("New Playlist");
         stage.setScene(scene);
         stage.show();
     }
@@ -516,7 +516,7 @@ public class MainController {
         //shows the window
         Stage stage = new Stage();
         stage.setResizable(false);
-        stage.setTitle("New/Edit Playlist");
+        stage.setTitle("Edit Playlist");
         stage.setScene(new Scene(root));
         stage.show();
     }
@@ -563,7 +563,7 @@ public class MainController {
                 AlertHelper.showError("Song " + lastSelectedSong.getTitle() + " already exists in playlist");
             return;}
         logic.addSongToPlaylist(lastSelectedSong, lastSelectedPlaylist);
-        lastSelectedPlaylist.getSongs().add(lastSelectedSong);
+        //lastSelectedPlaylist.getSongs().add(lastSelectedSong);
         playlistSongList.add(lastSelectedSong);
         playlistsTable.refresh();
 
