@@ -563,7 +563,7 @@ public class MainController {
                 AlertHelper.showError("Song " + lastSelectedSong.getTitle() + " already exists in playlist");
             return;}
         logic.addSongToPlaylist(lastSelectedSong, lastSelectedPlaylist);
-        //lastSelectedPlaylist.getSongs().add(lastSelectedSong);
+        lastSelectedPlaylist.getSongs().add(lastSelectedSong);
         playlistSongList.add(lastSelectedSong);
         playlistsTable.refresh();
 
