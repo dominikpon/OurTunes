@@ -3,6 +3,7 @@ package dk.easv.cs5.mytunes.bll;
 import dk.easv.cs5.mytunes.be.Genre;
 import dk.easv.cs5.mytunes.be.Playlist;
 import dk.easv.cs5.mytunes.be.Song;
+import dk.easv.cs5.mytunes.bll.exceptions.DuplicateSongException;
 import dk.easv.cs5.mytunes.bll.exceptions.LogicException;
 import dk.easv.cs5.mytunes.bll.tools.FormattingTool;
 import dk.easv.cs5.mytunes.dal.DAO.GenreDAO;
@@ -51,8 +52,10 @@ public class Logic implements ILogic {
         }
 
 
-        try {songDAO.save(song);
-
+        try {
+            songDAO.save(song);
+        }catch (DuplicateSongException e){
+            throw new LogicException("Song with this path already exists!",e);
             }catch (SQLException e){
                 e.printStackTrace();
             throw new LogicException("Failed to save song!", e);
@@ -71,7 +74,7 @@ public class Logic implements ILogic {
     }
 
     @Override
-    public void editSong(Song song) throws LogicException {
+    public void editSong(Song song) throws LogicException, DuplicateSongException {
         if (song.getTitle() == null) {
             throw new LogicException("Title is empty!");
         }

@@ -5,6 +5,7 @@ import dk.easv.cs5.mytunes.be.Genre;
 import dk.easv.cs5.mytunes.be.Song;
 import dk.easv.cs5.mytunes.bll.ILogic;
 import dk.easv.cs5.mytunes.bll.Logic;
+import dk.easv.cs5.mytunes.bll.exceptions.DuplicateSongException;
 import dk.easv.cs5.mytunes.bll.exceptions.LogicException;
 import dk.easv.cs5.mytunes.gui.helpers.AlertHelper;
 import javafx.beans.property.BooleanProperty;
@@ -86,7 +87,6 @@ public class SongEditController {
         List <Genre> genres = logic.getAllGenres();
         genreList.setAll(genres);
 
-        //comboGenre.setItems(FXCollections.observableArrayList(genres));
     }
 
 
@@ -142,7 +142,7 @@ public class SongEditController {
         System.out.println("Path: " + path);
 
     if(editMode.get()){ // it checks the mode and according that it chooses which if-clause to try
-            Integer id = songToEdit.getId();
+
         try {
                 songToEdit.setTitle(title);
                 songToEdit.setArtist(artist);
@@ -164,13 +164,17 @@ public class SongEditController {
             }catch (LogicException e){
                 AlertHelper.showError("An error occurred while trying to edit the song.");
                 e.printStackTrace();
-            }
-        }else
+            } catch (DuplicateSongException e) {
+            AlertHelper.showError("Song already exists with the same path");
+        }
+    }else
             try {
                 Song song = new Song(title, artist, selectedGenre, durationInSeconds, path);
                 logic.createSong(song);
                 songList.add(song);
                 AlertHelper.showInfo("Song was saved!");
+            }catch (LogicException e){
+                AlertHelper.showError((e.getMessage()));
 
                 txtTitle.clear();
                 txtArtist.clear();

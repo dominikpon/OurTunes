@@ -2,6 +2,7 @@ package dk.easv.cs5.mytunes.dal.DAO;
 
 import dk.easv.cs5.mytunes.be.Genre;
 import dk.easv.cs5.mytunes.be.Song;
+import dk.easv.cs5.mytunes.bll.exceptions.DuplicateSongException;
 import dk.easv.cs5.mytunes.dal.ConnectionManager;
 import dk.easv.cs5.mytunes.dal.DAOInterface.ISongDAO;
 
@@ -19,7 +20,7 @@ public class SongDAO implements ISongDAO  {
     }
 
     @Override
-    public void save(Song song) throws SQLException{
+    public void save(Song song) throws SQLException, DuplicateSongException {
         String sql = "INSERT INTO Songs (title, artist, genreId, duration, filePath ) VALUES (?,?,?,?,?)";
 
         try (Connection conn = getConnection();
@@ -40,16 +41,18 @@ public class SongDAO implements ISongDAO  {
                 }
             }
 
-
         } catch (SQLException e) {
-            e.printStackTrace();
+            if(e.getMessage().contains("Uq_Songs_Filepath")) {
+                    throw new DuplicateSongException("A song with this file path already exists!"
+            );
+        }
             throw new RuntimeException();
         }
 
     }
 
     @Override
-    public void edit(Song song) {
+    public void edit(Song song) throws DuplicateSongException {
         String sql = "UPDATE Songs Set title = ?, artist = ?, genreId = ?, duration = ?, filePath = ? WHERE id = ?";
     try(Connection conn = getConnection();
         PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)){
@@ -63,12 +66,13 @@ public class SongDAO implements ISongDAO  {
 
         ps.executeUpdate();
 
+
     } catch (SQLException e) {
-        e.printStackTrace();
+        if(e.getMessage().contains("Uq_Songs_Filepath")) {
+            throw new DuplicateSongException("A song with this file path already exists!");
+        }
         throw new RuntimeException("Failed to edit song");
     }
-
-
     }
 
     @Override
