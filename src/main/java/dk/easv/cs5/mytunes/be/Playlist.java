@@ -19,7 +19,6 @@ public class Playlist {
         this.name = name;
     }
 
-    public Playlist(int id, String name, List<Song> songList, int duration) {}
 
     public int getId() {
         return id;

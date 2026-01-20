@@ -8,6 +8,7 @@ import dk.easv.cs5.mytunes.bll.Logic;
 import dk.easv.cs5.mytunes.bll.exceptions.DuplicateSongException;
 import dk.easv.cs5.mytunes.bll.exceptions.LogicException;
 import dk.easv.cs5.mytunes.gui.helpers.AlertHelper;
+import dk.easv.cs5.mytunes.gui.model.Model;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
@@ -36,51 +37,39 @@ import java.util.List;
 
 public class SongEditController {
 
-    private ObservableList<Song> songList = FXCollections.observableArrayList();
-    private ObservableList<Genre> genreList = FXCollections.observableArrayList();
-    public void setSongList(ObservableList<Song> songList){
-        this.songList = songList;
-    }
-    public ObservableList<Genre> getGenreList(){
-        return this.genreList;
-    }
-
+    private Model model;
     private Song songToEdit;
-    private final BooleanProperty editMode = new SimpleBooleanProperty(false);
+    private Boolean editMode = false;
 
-
-    private ILogic logic = new Logic();
 
     public SongEditController() {
 
     }
 
 
-    @FXML private TextField txtTitle ;
-    @FXML private TextField txtArtist;
+    @FXML private TextField txtTitle, txtArtist, txtDuration, txtPath;
     @FXML private ComboBox<Genre> comboGenre;
-    @FXML private TextField txtDuration;
-    @FXML private TextField txtPath;
-    @FXML private Button btnChoosePath;
     private File selectedFile;
 
-
-
-    @FXML private Button btnSave;
+    @FXML private Button btnSave, btnCancel, btnChoosePath;
 
     public void setSaveButtonLabel(String label){
         btnSave.setText(label);
     }
 
 
-    @FXML private Button btnCancel;
 
 
     @FXML
     public void initialize(){
-        comboGenre.setItems(genreList);
         loadGenresIntoComboBox();
 
+    }
+
+    public void setModel(Model model){
+        this.model = model;
+
+        comboGenre.setItems(model.getGenreList());
     }
 
     private void loadGenresIntoComboBox(){

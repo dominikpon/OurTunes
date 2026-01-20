@@ -180,5 +180,10 @@ public class PlaylistDAO implements IPlaylistDAO {
         return songs;
 
     }
+
+    public void search(String query){
+        List<Playlist> playlists = new ArrayList<>();
+        String sql = "SELECT * FROM Playlists";
+    }
 }
 

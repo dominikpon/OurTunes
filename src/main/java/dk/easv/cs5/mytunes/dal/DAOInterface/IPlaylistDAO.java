@@ -13,7 +13,7 @@ public interface IPlaylistDAO  {
     public void remove(int id);
 
     public void addSongToPlaylist(int songId, int playlistId);
-    public void deleteSongFromPlaylist(int songId, int playlistId);
+    public void deleteSongFromPlaylist(int songId, int playlistId) throws SQLException;
     public void moveSongInPlaylist(int songId, int playlistId);
 
 

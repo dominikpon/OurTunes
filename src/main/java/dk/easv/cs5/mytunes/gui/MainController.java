@@ -8,6 +8,7 @@ import dk.easv.cs5.mytunes.bll.Logic;
 import dk.easv.cs5.mytunes.bll.exceptions.LogicException;
 import dk.easv.cs5.mytunes.bll.tools.FormattingTool;
 import dk.easv.cs5.mytunes.gui.helpers.AlertHelper;
+import dk.easv.cs5.mytunes.gui.model.Model;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -57,15 +58,14 @@ public class MainController {
     @FXML private Slider timeSlider;
 
     //Observable lists for manual refreshing of Lists
-    private ObservableList<Song> songList = FXCollections.observableArrayList();
-    private ObservableList<Playlist> playlistList = FXCollections.observableArrayList();
-    private ObservableList<Song> playlistSongList = FXCollections.observableArrayList();
+
 
     private Song lastSelectedSong;
     private Playlist lastSelectedPlaylist;
 
 
     private ILogic logic = new Logic();
+    private Model model = new Model(logic);
 
     private MediaPlayer mp;
     private Song currentlyPlayingSong;
@@ -79,6 +79,7 @@ public class MainController {
         colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         colArtist.setCellValueFactory(new PropertyValueFactory<>("artist"));
         colGenre.setCellValueFactory(new PropertyValueFactory<>("genre"));
+
 
         //format duration to mm:ss
         colDuration.setCellValueFactory(cellData ->{
@@ -96,9 +97,9 @@ public class MainController {
         //set column for Songs in Playlists table
         colSongInPlaylist.setCellValueFactory(new PropertyValueFactory<>("title"));
 
-        songsTable.setItems(songList);
-        playlistsTable.setItems(playlistList);
-        playlistSongsTable.setItems(playlistSongList);
+        songsTable.setItems(model.getSongList());
+        playlistsTable.setItems(model.getPlaylistList());
+        playlistSongsTable.setItems(model.getPlaylistSongList());
 
 
         //Tracking the last selected playlist
@@ -107,12 +108,7 @@ public class MainController {
         trackSongSelection();
 
 
-
-        //Load songs from database
-        songList.setAll(logic.getAllSongs());
-        //Load playlists from database
-        playlistList.setAll(logic.getAllPlaylists());
-        //Load songs in playlist from database
+        model.loadEverything();
 
         timeSlider.valueChangingProperty().addListener((obs, wasChanging, isChanging) -> {
             if (!isChanging && mp != null) {
@@ -139,11 +135,8 @@ public class MainController {
         playlistsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
         {
             if (newValue != null) {
-                lastSelectedPlaylist = newValue;
-                System.out.println("Selected playlist: " + newValue.getName());
-                loadSongsForPlaylist(newValue.getId());
+                model.loadSongsInPlaylist(newValue);
             }
-
         });
 
     }
@@ -154,8 +147,7 @@ public class MainController {
                 {
                     if (newValue != null) {
                         playlistSongsTable.getSelectionModel().clearSelection();
-                        lastSelectedSong = newValue;
-                        System.out.println("Selected song: " + newValue);
+                        model.setSelectedSong(newValue);
                     }
                 }
         );
@@ -164,24 +156,11 @@ public class MainController {
         {
             if (newValue != null) {
                 songsTable.getSelectionModel().clearSelection();
-                lastSelectedSong = newValue;
-                System.out.println("Selected song: " + newValue);
+                model.setSelectedSong(newValue);
             }
         });
     }
 
-    private void loadSongsForPlaylist(int playlistId){
-        try {
-            ObservableList <Song> songs = FXCollections.observableArrayList(
-            logic.getAllSongsInPlaylist(playlistId));
-            lastSelectedPlaylist.setSongList(songs);
-            playlistSongList.setAll(logic.getAllSongsInPlaylist(playlistId));
-            playlistSongsTable.refresh();
-        } catch (Exception e) {
-            e.printStackTrace();
-            AlertHelper.showInfo("Could not load songs for playlist " + playlistId + "\n" + e.getMessage());
-        }
-    }
 
 
     @FXML
@@ -189,7 +168,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/SongEditWindow.fxml"));
             Parent root = fxmlLoader.load();
             SongEditController controller = fxmlLoader.getController();
-            controller.setSongList(songList);
+            controller.setModel(this.model);
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setResizable(false);
@@ -201,7 +180,7 @@ public class MainController {
     private boolean isFiltered;
 
     private void clearFilter() {
-        songsTable.setItems(songList);
+        songsTable.setItems(model.getSongList());
         filterField.clear();
         searchButton.setText("Filter");
         isFiltered = false;
@@ -217,12 +196,12 @@ public class MainController {
 
             String search = filterField.getText().toLowerCase().trim();
                 if(search.isEmpty()){
-                    songsTable.setItems(songList);
+                    songsTable.setItems(model.getSongList());
                     return;
                 }
                ObservableList<Song> filtered = FXCollections.observableArrayList();
 
-                for(Song s : songList) {
+                for(Song s : model.getSongList()) {
                     if (s.getTitle().toLowerCase().contains(search) || (s.getArtist().toLowerCase().contains(search))){
                         filtered.add(s);
                     }
@@ -256,7 +235,7 @@ public class MainController {
 
         // Decide which list we are playing from
         if (playlistSongsTable.getSelectionModel().getSelectedItem() != null) {
-            currentPlayQueue = playlistSongList;
+            currentPlayQueue =model.getPlaylistSongList();
         } else {
             currentPlayQueue = songsTable.getItems();
         }
@@ -355,7 +334,7 @@ public class MainController {
         Song nextSong = currentPlayQueue.get(nextIndex);
 
         // Update UI selection
-        if (currentPlayQueue == playlistSongList) {
+        if (currentPlayQueue == model.getPlaylistSongList()) {
             playlistSongsTable.getSelectionModel().select(nextSong);
         } else {
             songsTable.getSelectionModel().select(nextSong);
@@ -367,14 +346,17 @@ public class MainController {
 
     @FXML
     private void onEditSongButtonAction(ActionEvent actionEvent) throws IOException {
-        if (lastSelectedSong != null) {
+        Song selected = model.getSelectedSong();
+
+        if (selected == null) {
+            AlertHelper.showError("Please select a song to edit ");
+            return;
+        }
             FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/SongEditWindow.fxml"));
             Parent root = fxmlLoader.load();
             SongEditController controller = fxmlLoader.getController();
-            controller.setSongToEdit(lastSelectedSong);
-            controller.setSongList(songList);
+            controller.setModel(this.model);
             controller.setSaveButtonLabel("Edit");
-            //controller.setEditMode(true);
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setResizable(false);
@@ -382,11 +364,7 @@ public class MainController {
             stage.setScene(scene);
             stage.show();
         }
-        else  {
-            AlertHelper.showInfo("Please select a song to edit.");
-        }
 
-    }
     @FXML
     private void onDeleteSongAction(ActionEvent actionEvent) {
         Song lastSelectedSong = songsTable.getSelectionModel().getSelectedItem();
@@ -401,22 +379,8 @@ public class MainController {
         AlertHelper.showConfirmation(lastSelectedSong.getTitle()).ifPresent(response -> {
             if (response == ButtonType.OK) {
                 try {
-                    // 1) Delete from database
-                    logic.deleteSong(lastSelectedSong);
-
-                    // 2) Remove from main song list
-                    songList.remove(lastSelectedSong);
-                    songsTable.refresh();
-
-                    // 3) Remove from playlist table (if it's there)
-                    playlistSongList.removeIf(s -> s.getId() == lastSelectedSong.getId());
-                    playlistSongsTable.refresh();
-                    if(lastSelectedPlaylist != null) {
-                    lastSelectedPlaylist.setSongList(playlistSongList);}
-                    playlistsTable.refresh();
-
+                    model.removeSong(lastSelectedSong);
                 } catch (Exception e) {
-                    e.printStackTrace();
                     AlertHelper.showError(
                             "Could not delete the selected song.\n" + e.getMessage()
                     );
@@ -427,26 +391,17 @@ public class MainController {
 
     @FXML
     private void onDeleteSongFromPlaylistAction(ActionEvent actionEvent) {
-        Song lastSelectedSong = playlistSongsTable.getSelectionModel().getSelectedItem();
-        Playlist lastSelectedPlaylist = playlistsTable.getSelectionModel().getSelectedItem();
+        Song selectedSong = playlistSongsTable.getSelectionModel().getSelectedItem();
+        Playlist selectedPlaylist = playlistsTable.getSelectionModel().getSelectedItem();
 
-        if (lastSelectedSong == null) {
-            AlertHelper.showError("Please select a song to delete from the playlist.");
+        if (selectedSong == null || selectedPlaylist == null) {
+            AlertHelper.showError("Please select a song and playlist to delete from the playlist.");
             return;}
 
-        if (lastSelectedPlaylist == null) {
-            AlertHelper.showError("Please select a playlist.");
-            return;
-        }
         AlertHelper.showConfirmation(lastSelectedSong.getTitle()).ifPresent(response -> {
             if (response == ButtonType.OK) {
                 try {
-                    logic.removeSongFromPlaylist(lastSelectedSong,lastSelectedPlaylist);
-                    playlistSongList.removeIf(s -> s.getId() == lastSelectedSong.getId());
-                    playlistSongsTable.refresh();
-
-                    lastSelectedPlaylist.setSongList(playlistSongList);
-                    playlistsTable.refresh();
+                    model.removeSongFromPlaylist(selectedSong, selectedPlaylist);
                 } catch (Exception e) {
                     e.printStackTrace();
                     AlertHelper.showError("Could not delete the selected song.\n" + e.getMessage());
@@ -462,12 +417,12 @@ public class MainController {
         int index = playlistSongsTable.getSelectionModel().getSelectedIndex();
 
         // Check if index is valid and within bounds
-        if (index < 0 || index + direction < 0 || index + direction >= playlistSongList.size()) {
+        if (index < 0 || index + direction < 0 || index + direction >= model.getPlaylistSongList().size()) {
             return;
         }
 
         // Swap the current song with the one above or below
-        Collections.swap(playlistSongList, index, index + direction);
+        Collections.swap(model.getPlaylistSongList(), index, index + direction);
 
         // Update selection to follow the moved song
         playlistSongsTable.getSelectionModel().select(index + direction);
@@ -489,7 +444,7 @@ public class MainController {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("gui/PlaylistEditWindow.fxml"));
         Parent root = fxmlLoader.load();
         PlaylistEditController controller = fxmlLoader.getController();
-        controller.setPlaylistList(playlistList);
+        controller.setModel(this.model);
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setResizable(false);
@@ -511,8 +466,7 @@ public class MainController {
 
         // give controller the playlist
         PlaylistEditController controller = fxmlLoader.getController();
-        controller.setPlaylistList(playlistList);
-        controller.setPlaylistToEdit(selectedPlaylist);
+        controller.setModel(this.model);
         //shows the window
         Stage stage = new Stage();
         stage.setResizable(false);
@@ -522,19 +476,16 @@ public class MainController {
     }
     @FXML
     private void onDeleteButtonPlaylistAction(ActionEvent actionEvent) {
-        Playlist lastSelectedPlaylist = playlistsTable.getSelectionModel().getSelectedItem();
-        if (lastSelectedPlaylist == null) {
+        Playlist selectedPlaylist = playlistsTable.getSelectionModel().getSelectedItem();
+        if (selectedPlaylist == null) {
             AlertHelper.showError("Please select a playlist to delete.");
             return;
         }
-        AlertHelper.showConfirmation(lastSelectedPlaylist.getName()).ifPresent(response -> {
+        AlertHelper.showConfirmation(selectedPlaylist.getName()).ifPresent(response -> {
             if (response == ButtonType.OK) {
                 try {
-                    logic.deletePlaylist(lastSelectedPlaylist);
-                    playlistList.remove(lastSelectedPlaylist);
-                    playlistSongList.remove(lastSelectedPlaylist);
-                    playlistSongsTable.refresh();
-                    playlistsTable.refresh();
+                    model.deletePlaylist(selectedPlaylist);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     AlertHelper.showError("Could not delete the selected playlist.\n" + e.getMessage());
@@ -548,32 +499,21 @@ public class MainController {
         javafx.application.Platform.exit();
     }
 
-    public void onAddSongToPlaylistButtonAction(ActionEvent actionEvent) {
-        if (lastSelectedPlaylist == null){
-            System.out.println("Select a playlist");
+    public void onAddSongToPlaylistButtonAction(ActionEvent actionEvent) throws LogicException {
+        Song lastSelectedSong = model.getSelectedSong();
+        Playlist lastSelectedPlaylist = playlistsTable.getSelectionModel().getSelectedItem();
+
+        if (lastSelectedSong == null || lastSelectedPlaylist == null){
+            System.out.println("Select both song and playlist to add song to the playlist.");
             return;
         }
-
-        if (lastSelectedSong == null) {
-            System.out.println("Select a song first");
+        try {
+            model.addSongToPlaylist(lastSelectedSong, lastSelectedPlaylist);
+        }catch (LogicException e) {
+            AlertHelper.showError(e.getMessage());
         }
-
-        boolean alreadyInPlaylist = playlistSongList.stream().anyMatch(s -> s.getId() == lastSelectedSong.getId());
-            if(alreadyInPlaylist){
-                AlertHelper.showError("Song " + lastSelectedSong.getTitle() + " already exists in playlist");
-            return;}
-        logic.addSongToPlaylist(lastSelectedSong, lastSelectedPlaylist);
-        lastSelectedPlaylist.getSongs().add(lastSelectedSong);
-        playlistSongList.add(lastSelectedSong);
-        playlistsTable.refresh();
-
-        System.out.println("Added: " + lastSelectedSong.getTitle()+ " to " + lastSelectedPlaylist.getName()); //If I try to add lastSelectedPlaylist.getName() it just shows ID of playlist
     }
 
-
-    public void refreshSongsTable() {
-        songsTable.refresh();
-    }
 
 }
 

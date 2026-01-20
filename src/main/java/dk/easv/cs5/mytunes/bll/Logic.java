@@ -12,6 +12,9 @@ import dk.easv.cs5.mytunes.dal.DAO.SongDAO;
 import dk.easv.cs5.mytunes.dal.DAOInterface.IGenreDAO;
 import dk.easv.cs5.mytunes.dal.DAOInterface.IPlaylistDAO;
 import dk.easv.cs5.mytunes.dal.DAOInterface.ISongDAO;
+import dk.easv.cs5.mytunes.gui.helpers.AlertHelper;
+
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -157,14 +160,17 @@ public class Logic implements ILogic {
     }
 
     @Override
-    public void removeSongFromPlaylist(Song song, Playlist playlist) {
+    public void removeSongFromPlaylist(Song song, Playlist playlist) throws LogicException {
         int songId = song.getId();
         int playlistId = playlist.getId();
-        if(songId == 0 || playlistId == 0){
-            return;
+        if(song == null || playlist == null || songId == 0 || playlistId == 0){
+            throw new LogicException("Invalid song or playlist ID");
         }
-        playlistDAO.deleteSongFromPlaylist(songId, playlistId); //this
-
+        try {
+            playlistDAO.deleteSongFromPlaylist(songId, playlistId); //this
+        }catch (SQLException e){
+            throw new LogicException("Failed to remove song from playlist", e);
+        }
     }
 
     @Override
